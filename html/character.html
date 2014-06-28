@@ -7,15 +7,38 @@
 	<script src="../js/character.js"></script>
 	<script type="text/javascript">
 
+	var currentAnimation = null;
+	var context = null;
+
 	init = function() {
-	canvas = document.getElementById("cvs");
-	context = canvas.getContext("2d");		
-	currentAnimation = new character("../images/SpriteSheet-Monkey3.png", canvas, context, 75, 22, 1, 2, 0, callbackWhenReady);
+		canvas = document.getElementById("cvs");
+		context = canvas.getContext("2d");		
+		currentAnimation = new character("../images/SpriteSheet-Monkey3.png", "SE", 0, callbackWhenReady);
 	}
 
-	callbackWhenReady = function() {
-	currentAnimation.draw();
+	/*callbackWhenReady = function() {
+		currentAnimation.draw(context, 10, 10);
 	}
+	*/
+	callbackWhenReady = function() {
+		animables[0] = currentAnimation; 
+		currentAnimation.play();
+		currentAnimation.draw(context, 10, 10, 1);
+		mainloop();
+	}
+
+	var fps = 2;
+	// Main loop
+	mainloop = function() {
+		
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		for (var i=0; i < animables.length; i++) {
+			animables[i].draw(context, 10, 10, 1);
+			//animables[i].setXY(100+i, 40);
+		}
+		setTimeout("requestAnimationFrame(mainloop)", 1000/fps);
+	}
+	var animables = [];
 	</script>
 </head>
 
