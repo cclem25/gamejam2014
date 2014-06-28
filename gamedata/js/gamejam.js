@@ -16,8 +16,18 @@ initGame = function(canvas) {
 	extAqua = new Scene("exterieurAqua", canvas, meshExterieurAqua(), "gamedata/images/exterieurAqua.jpg", context, callbackWhenReady);
 	game.addScene(extAqua);
 
-	// scene 3
-	//game.addScene(new Scene("amphiA", canvas, meshAmphiA(), "gamedata/images/amphiA.jpg", context, callbackWhenReady));
+	// scene 3 : Amphi A
+	
+	amphiA = new Scene("amphiA", canvas, meshAmphiA(), "gamedata/images/amphiA.jpg", context, callbackWhenReady);
+	game.addScene(amphiA);
+
+	// Scène Aqua
+
+	aqua = new Scene("Aqua", canvas, meshAqua(), "gamedata/images/IMGP3708.JPG", context, callbackWhenReady);
+	game.addScene(aqua);
+
+	scolarite = new Scene("scolarite", canvas, meshScolarite(), "gamedata/images/IMGP3711.JPG", context, callbackWhenReady);
+	game.addScene(scolarite);
 
 
 
@@ -29,6 +39,16 @@ initGame = function(canvas) {
 	/* Aqua */
 	extAqua.addPassage(new Passage(10, 540, map, new Point(410,630)));
 	extAqua.addPassage(new Passage(1623, 450, map, new Point(517,662)));
+	extAqua.addPassage(new Passage(1478, 402, amphiA, new Point(965, 372, 0.3)));
+	extAqua.addPassage(new Passage(805, 391, aqua ,new Point(1000, 1000)));
+	extAqua.addPassage(new Passage(320, 305, scolarite ,new Point(1000, 1000)));
+
+	/* AmphiA */
+	amphiA.addPassage(new Passage(965, 372, extAqua, new Point(1478, 402)));
+
+	/* Aqua intérieur */
+
+	/* Scolarité */
 
 	return game;	
 }
@@ -60,7 +80,7 @@ meshMap = function() {
 	// décrochment imprimerie
 	p7 = new Point(509, 166);
 	// décochement imprimerie coté bat C
-	p8= new Point(506, 148);
+	p8 = new Point(506, 148);
 	// direction parking imprimerie
 	p9 = new Point(730, 162);
 	// croisement parking imprimerie
@@ -68,7 +88,7 @@ meshMap = function() {
 	// route bat G
 	p11 = new Point(897, 20);
 	// bas bat G	
-	p13= new Point(939, 155);
+	p13 = new Point(939, 155);
 	// bout EST bat B
 	p14 = new Point(850, 345);
 	// 
@@ -132,5 +152,29 @@ meshExterieurAqua = function() {
 	return m;		
 }
 
+meshAmphiA = function(){
+	var m = new Mesh();
 
+	var pPorte = new Point(965, 372, 0.3);
+	var pHautEscalier = new Point(1230, 460, 0.4);
+	var pBasEscaliers = new Point(1218, 805, 0.4);
+	var pSiege = new Point(846, 805, 0.4);
 
+	m.addSegment(new Segment(pPorte, pHautEscalier));
+	m.addSegment(new Segment(pHautEscalier, pBasEscaliers));
+	m.addSegment(new Segment(pBasEscaliers, pSiege));
+
+	return m;
+}
+
+meshAqua = function(){
+	var m = new Mesh();
+	var pPorte = new Point(1965, 372);
+	return m;
+}
+
+meshScolarite = function(){
+	var m = new Mesh();
+	var pPorte = new Point(1965, 372);
+	return m;
+}
