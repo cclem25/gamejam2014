@@ -1,0 +1,267 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Test déplacement</title>
+	<script src="./js/mesh.js"></script>	
+	<script type="text/javascript">
+
+var DEBUG = false;
+
+var canvas = null;
+var context = null;
+
+var currentPoint = new Point(2061, 156, 1);
+var targetPoint = [];
+
+var CVS_WIDTH = 1000;
+var CVS_HEIGHT = 560;
+
+var OFFSET_X = 0;
+var OFFSET_Y = 0;
+
+var BG_WIDTH = 2197;
+var BG_HEIGHT = 560; 
+
+init = function() {
+	canvas = document.getElementById("cvs");
+	canvas.addEventListener("click", cvsClick, false);
+	context = canvas.getContext("2d");		
+	canvas.style.backgroundImage = "url(mi2.png)";
+	// update display
+	redraw();
+	mainloop();
+}
+
+var fps = 40;
+// Main loop
+mainloop = function() {
+	if (targetPoint.length > 0) {
+		// update important data
+		nextPoint();
+		// update display
+		redraw();
+	}
+	// callback			
+	setTimeout("requestAnimationFrame(mainloop)", 1000/fps);
+}
+
+
+var SPEED = 8;
+
+nextPoint = function() {
+	
+	var norme = currentPoint.distanceTo(targetPoint[0]);
+	
+	// TODO optimize segment detection
+	var realSpeed = mesh.getClosestPointAndSegment(currentPoint).segment.getSpeedFactor() * SPEED;
+	
+	// compute new position relateed to the direction to the target point.
+	if (norme < realSpeed) {
+		currentPoint.x = targetPoint.x;
+		currentPoint.y = targetPoint.y;
+		currentPoint.zoom = targetPoint.zoom;
+		if (targetPoint.length > 0) {
+			currentPoint = targetPoint.shift();
+		}
+		return;
+	}
+	
+	var vecX = targetPoint[0].x - currentPoint.x;
+	var vecY = targetPoint[0].y - currentPoint.y;
+	
+	var oldDistance = norme;
+	
+	currentPoint.x = currentPoint.x + (vecX * realSpeed / norme);	
+	currentPoint.y = currentPoint.y + (vecY * realSpeed / norme);
+	
+	var newDistance = currentPoint.distanceTo(targetPoint[0]);
+	currentPoint.zoom += ((oldDistance - newDistance) / oldDistance) * (targetPoint[0].zoom - currentPoint.zoom);		
+}
+
+redraw = function() {
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	
+	// update offsets
+	OFFSET_X = CVS_WIDTH / 2 - currentPoint.x;
+	
+	if (OFFSET_X > 0) {
+		OFFSET_X = 0;	
+	}	
+	if (OFFSET_X < CVS_WIDTH - BG_WIDTH) {
+		OFFSET_X = CVS_WIDTH - BG_WIDTH;	
+	}
+	
+	OFFSET_Y = CVS_HEIGHT / 2 - currentPoint.y;
+	if (OFFSET_Y > 0) {
+		OFFSET_Y = 0;	
+	}
+	if (OFFSET_Y < CVS_HEIGHT - BG_HEIGHT) {
+		OFFSET_Y = CVS_HEIGHT - BG_HEIGHT;	
+	}
+		
+
+	context.fillStyle = "#FFFFFF";
+	context.strokeStyle = "#FFFFFF";
+	mesh.display(context);
+	
+	canvas.style.backgroundPosition = "" + OFFSET_X + "px " + OFFSET_Y + "px";
+	
+	context.beginPath();
+	context.arc(currentPoint.x + OFFSET_X, currentPoint.y + OFFSET_Y, 10*currentPoint.zoom, 0, 2*Math.PI);		
+	context.fill();
+	context.fillText("c_p (" + currentPoint.zoom + ")", currentPoint.x - 10 + OFFSET_X, currentPoint.y + 20 + OFFSET_Y);
+
+/*
+	if (targetPoint.length > 0) {
+		context.fillStyle = "#FFFFFF";
+		// display target point
+		context.beginPath();
+		context.arc(targetPoint[targetPoint.length-1].x + OFFSET_X, targetPoint[targetPoint.length-1].y + OFFSET_Y, targetPoint[targetPoint.length-1].zoom*10, 0, 2*Math.PI);		
+		context.fill();
+		for (var i=0; i < targetPoint.length; i++) {
+			context.fillText(targetPoint[i].zoom, targetPoint[i].x + OFFSET_X, targetPoint[i].y + 20 + OFFSET_Y);
+		}
+		context.fillStyle = "#FFFFFF";
+	}
+	
+*/	
+}
+
+
+cvsClick = function(event) {
+	var closest = mesh.getClosestPointAndSegment(getPosition(event));
+	var pDest = closest.point;
+	var segDest = closest.segment;
+	pDest.zoom = getZoom(pDest, segDest.getPoint1(), segDest.getPoint2());
+	var segSource = mesh.getClosestPointAndSegment(currentPoint).segment;
+	var pathToTarget = mesh.getPathFromTo(currentPoint, segSource, pDest, segDest);
+	targetPoint = [];
+	for (i=1; i < pathToTarget.length; i++) {
+		targetPoint.push(new Point(pathToTarget[pathToTarget.length - 1 - i].x, 
+								   pathToTarget[pathToTarget.length - 1 - i].y, 
+								   pathToTarget[pathToTarget.length - 1 - i].zoom));
+	}
+}
+
+
+getZoom = function(p, p1, p2) {
+	
+	if (p1.zoom == p2.zoom)
+		return p1.zoom;
+	
+	var distanceP1P2 = p1.distanceTo(p2);
+	var distancePP1 = p.distanceTo(p1);
+	
+	// ratio distance w.r.t. P1
+	var ratio = distancePP1 / distanceP1P2;
+	return p1.zoom + (ratio * (p2.zoom - p1.zoom));		
+}
+
+
+
+
+
+
+/**
+ *	Retrieves the clicked point from the mouse event
+ *	@param	Event	event	The clicked event
+ *	@return	Point			The clicked point	
+ */
+getPosition = function(event) {
+	
+	// gets the click coordinates
+	if (event.x != undefined && event.y != undefined) {
+		x = event.x;
+		y = event.y;
+	}	
+	else { // Firefox method to get the position
+		x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+	}
+	x -= canvas.offsetLeft + OFFSET_X; 
+	y -= canvas.offsetTop + OFFSET_Y;
+	 
+	return new Point(x,y);
+}
+
+
+myTestMesh = function() {
+
+	var m = new Mesh();
+	
+	p1 = new Point(2061, 156, 1);
+	p2 = new Point(1770, 255, 1);
+	m.addSegment(new Segment(p1, p2, 1));
+	p3 = new Point(1587, 270, 1);
+	m.addSegment(new Segment(p2, p3, 1));
+	p4 = new Point(1404,252, 1);
+	m.addSegment(new Segment(p3, p4, 1));
+	
+	p5 = new Point(1116, 288, 1);
+	m.addSegment(new Segment(p4, p5, 1));
+	
+	p6 = new Point(1180, 216, 0.75);
+	m.addSegment(new Segment(p5, p6, 0.75));
+	
+	p7 = new Point(882,282);
+	m.addSegment(new Segment(p5, p7, 1));
+	
+	p8 = new Point(771,276);
+	m.addSegment(new Segment(p7, p8, 1));
+	
+	p9 = new Point(705,306, 1.1);
+	m.addSegment(new Segment(p8, p9, 1));
+	
+	p10 = new Point(822,375, 1.3);
+	m.addSegment(new Segment(p9, p10, 1));
+
+	p11 = new Point(873,435, 1.4);
+	m.addSegment(new Segment(p10, p11, 1));
+	
+	p12 = new Point(696,261);
+	m.addSegment(new Segment(p8, p12, 1));
+	
+	p13 = new Point(582,273);
+	m.addSegment(new Segment(p12, p13, 1));
+
+	p14 = new Point(462,249, 0.9);
+	m.addSegment(new Segment(p13, p14, 0.7));
+
+	p15 = new Point(513,183,0.6);
+	m.addSegment(new Segment(p14, p15, 0.4));
+
+	p16 = new Point(426,297);
+	m.addSegment(new Segment(p13, p16, 1));
+
+	p17 = new Point(228,300);
+	m.addSegment(new Segment(p16, p17, 1));
+	
+	p18 = new Point(201,276);
+	m.addSegment(new Segment(p17, p18, 1));
+
+	
+	return m;	
+
+}
+
+var mesh = myTestMesh();
+
+
+
+	</script>
+</head>
+
+<body onload="init()">
+
+	<div style="width: 1004px; margin: 20px auto;">
+		<canvas id="cvs" width="1000" height="560" style="border: solid 2px #000;">
+		Votre navigateur ne supporte pas les canvas... Dommage.
+		</canvas>
+	</div>
+
+
+</body>
+
+</html>
