@@ -6,13 +6,16 @@
 initGame = function(canvas) {
 	
 	// game
-	game = new Game();
+	game = new Game(canvas);
 	
 	// scene 1 : map
 	game.addScene(new Scene("map", canvas, meshMap(), "gamedata/images/map2.jpg", context, callbackWhenReady));	
 	
 	// scene 2 : exterieur aqua
 	game.addScene(new Scene("exterieurAqua", canvas, meshExterieurAqua(), "gamedata/images/exterieurAqua.jpg", context, callbackWhenReady));
+
+	// scene 3
+	//game.addScene(new Scene("amphiA", canvas, meshAmphiA(), "gamedata/images/amphiA.jpg", context, callbackWhenReady));
 
 	return game;	
 }
@@ -99,6 +102,7 @@ meshMap = function() {
 }
 
 
+// EXTERIEUR AQUA
 meshExterieurAqua = function() {
 
 	var m = new Mesh();
@@ -110,9 +114,9 @@ meshExterieurAqua = function() {
 	var pEntreeAqua = new Point(805, 391, 0.4);
 	var pDroiteAqua = new Point(1320, 500);
 	var pAvantSortie = new Point(1478, 445);
-	var pAmphiA = new Point(1478, 402);
-	var pSortieDroite = new Point(1623, 450);
-	var pSortieGauche = new Point(10, 540);
+	var pAmphiA = new Point(1478, 402, 0.3);
+	var pSortieDroite = new Point(1623, 450, 0.7);
+	var pSortieGauche = new Point(10, 540, 1.6);
 	
 	m.addSegment(new Segment(pEntreeUFR, pMilieuEscaliers, 0.3));
 	m.addSegment(new Segment(pBasEscaliers, pMilieuEscaliers, 0.6));
@@ -121,11 +125,10 @@ meshExterieurAqua = function() {
 	m.addSegment(new Segment(pDroiteAqua, pEnFaceAqua));
 	m.addSegment(new Segment(pEntreeAqua, pEnFaceAqua, 0.3));
 	m.addSegment(new Segment(pAvantSortie, pDroiteAqua));
-	m.addSegment(new Segment(pAmphiA, pAvantSortie));
+	m.addSegment(new Segment(pAmphiA, pAvantSortie, 0.2));
 	m.addSegment(new Segment(pSortieDroite, pAvantSortie));
-
-	return m;
-		
+	
+	return m;		
 }
 
 

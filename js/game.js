@@ -5,7 +5,7 @@
  */
 
 
-function Game() {
+function Game(_cvs) {
 
 	/** Internal variables */
 	var variables = new Object();
@@ -19,8 +19,20 @@ function Game() {
 	/** Inventory */
 	var inventory = new Object();
 	
+	/** Current action */
+	var currentAction = 0;
 	
-		
+	/** selected object */
+	var selectedObject = null;
+	
+	// Disabling of right button 	
+	_cvs.oncontextmenu = function(event) {
+		if (event.button == 2) {
+			game.nextAction();	
+		}
+		return false;
+	}
+	
 	
 	//---- GAME VARIABLES ---- 
 	
@@ -79,6 +91,47 @@ function Game() {
 		currentScene = (this.getScene(scName) != null) ? this.getScene(scName) : currentScene;	
 	} 
 	
+	
+	// ----------------------------------- //
+	// ------ Management of actions ------ //
+	// ----------------------------------- //
+	
+	var NO_ACTION = 0;
+	var LOOK_AT = 1;
+	var USE = 2;
+	var USE_WITH = 3;
+	
+	/**
+	 *	Change the current action (moves to the next one). 
+	 *	Invoked when the user right-clicks on the board.
+	 */
+	this.nextAction = function() {
+		// update the action kind
+		currentAction = (currentAction + 1) % 4;
+		if (currentAction == USE_WITH && selectedObject == null) {
+			currentAction = 0;	
+		}
+		// update the cursor shape
+		var board = _cvs;
+		switch (currentAction) {
+			case NO_ACTION:
+				board.style.cursor = "url(./images/cursor.png) 12 0, auto";
+				break;
+			case LOOK_AT: 
+				board.style.cursor = "url(./images/yeux.png) 25 16, auto";
+				break;
+			case USE:
+				board.style.cursor = "url(./images/main.png) 3 5, auto";
+				break; 	
+//			case USE_WITH:			
+//				board.style.cursor = selectedObject.getCodeToDisplayImageAsCursor();
+//				break;
+		}
+	}
+
+
+	
+		
 }
 
 

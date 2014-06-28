@@ -7,7 +7,7 @@
 	<script src="./js/mesh.js"></script>	
 	<script src="./js/scene.js"></script>	
 	<script type="text/javascript">
-
+ 
 var DEBUG = false;
 
 var currentScene = null;
@@ -18,7 +18,7 @@ init = function() {
 	canvas = document.getElementById("cvs");
 	canvas.addEventListener("click", cvsClick, false);
 	context = canvas.getContext("2d");		
-	currentScene = new Scene(canvas, myTestMesh(), "images/map2.jpg", context, callbackWhenReady);
+	currentScene = new Scene("map", canvas, myTestMesh(), "images/map2.jpg", context, callbackWhenReady);
 }
 
 
@@ -27,6 +27,7 @@ callbackWhenReady = function() {
 	currentScene.redraw();	
 	mainloop();
 }
+
 
 var fps = 40;
 // Main loop
