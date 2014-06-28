@@ -12,7 +12,7 @@ var DEBUG = false;
 var canvas = null;
 var context = null;
 
-var currentPoint = new Point(2061, 156, 1);
+var currentPoint = new Point(515, 508, 1);
 var targetPoint = [];
 
 var CVS_WIDTH = 1000;
@@ -21,14 +21,14 @@ var CVS_HEIGHT = 560;
 var OFFSET_X = 0;
 var OFFSET_Y = 0;
 
-var BG_WIDTH = 1247;
-var BG_HEIGHT = 853; 
+var BG_WIDTH = 1092;
+var BG_HEIGHT = 729; 
 
 init = function() {
 	canvas = document.getElementById("cvs");
 	canvas.addEventListener("click", cvsClick, false);
 	context = canvas.getContext("2d");		
-	canvas.style.backgroundImage = "url(images/map.png)";
+	canvas.style.backgroundImage = "url(images/map2.jpg)";
 	// update display
 	redraw();
 	mainloop();
@@ -191,6 +191,81 @@ myTestMesh = function() {
 
 	var m = new Mesh();
 	
+	pAqua = new Point(515, 508, 1);
+	
+	pEntreeUFRST = new Point(332, 520, 1);
+	
+	pEntreeBatC = new Point(310, 155);
+	
+	pEntreeImprimerie = new Point(560, 141);
+	
+	pEntreeBatG = new Point(950,30);
+	
+	pEntreeAmphiA = new Point(563, 532);
+	
+	// intermédiaire aqua <-> amphi A
+	p1 = new Point(510, 540);
+	// devant entree UFR 
+	p2 = new Point(355, 565);
+	// au bout du batiment 
+	p3 = new Point(45, 545);
+	// au bout en haut du batiment B
+	p4 = new Point(50, 440);
+	// derrière bat B
+	p5 = new Point(603, 381);
+	// haut imprimerie
+	p6 = new Point(583, 167);
+	// décrochment imprimerie
+	p7 = new Point(509, 166);
+	// décochement imprimerie coté bat C
+	p8= new Point(506, 148);
+	// direction parking imprimerie
+	p9 = new Point(730, 162);
+	// croisement parking imprimerie
+	p10 = new Point(841, 95);
+	// route bat G
+	p11 = new Point(897, 20);
+	// bas bat G	
+	p13= new Point(939, 155);
+	// bout EST bat B
+	p14 = new Point(850, 345);
+	// 
+	p15 = new Point(1040, 376);
+	p16 = new Point(987, 640);
+	p17 = new Point(886, 685);
+	p18 = new Point(522, 704);
+
+	
+	m.addSegment(new Segment(pAqua, p1));
+	m.addSegment(new Segment(p1, pEntreeAmphiA));
+	m.addSegment(new Segment(p1, p2));
+	m.addSegment(new Segment(p2, pEntreeUFRST));
+	m.addSegment(new Segment(p3, pEntreeUFRST));
+	m.addSegment(new Segment(p3, p4));
+	m.addSegment(new Segment(p4, p5));
+	m.addSegment(new Segment(p5, p6));
+	m.addSegment(new Segment(p6, pEntreeImprimerie));
+	m.addSegment(new Segment(p6, p7));
+	m.addSegment(new Segment(p7, p8));
+	m.addSegment(new Segment(p8, pEntreeBatC));
+	m.addSegment(new Segment(p6, p9));
+	m.addSegment(new Segment(p9, p10));
+	m.addSegment(new Segment(p10, p11));
+	m.addSegment(new Segment(p11, pEntreeBatG));
+	m.addSegment(new Segment(p10, p13));
+	m.addSegment(new Segment(p13, p14));
+	m.addSegment(new Segment(p14, p5));
+	m.addSegment(new Segment(p14, p15));
+	m.addSegment(new Segment(p15, p16));
+	m.addSegment(new Segment(p16, p17));
+	m.addSegment(new Segment(p17, p18));
+	m.addSegment(new Segment(p1, p18));
+
+
+	
+	/*
+	
+	
 	p1 = new Point(2061, 156, 1);
 	p2 = new Point(1770, 255, 1);
 	m.addSegment(new Segment(p1, p2, 1));
@@ -241,6 +316,7 @@ myTestMesh = function() {
 	p18 = new Point(201,276);
 	m.addSegment(new Segment(p17, p18, 1));
 
+*/
 	
 	return m;	
 
