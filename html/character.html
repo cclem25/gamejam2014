@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Test du moteur de jeu</title>
+	<script src="../js/character.js"></script>
+	<script type="text/javascript">
+
+	init = function() {
+	canvas = document.getElementById("cvs");
+	context = canvas.getContext("2d");		
+	currentAnimation = new character("../images/SpriteSheet-Monkey3.png", canvas, context, 75, 22, 1, 2, 0, callbackWhenReady);
+	}
+
+	callbackWhenReady = function() {
+	currentAnimation.draw();
+	}
+	</script>
+</head>
+
+<body onload="init()">
+
+	<div style="width: 1004px; margin: 20px auto;">
+		<canvas id="cvs" width="1000" height="560" style="border: solid 2px #000;">
+		Votre navigateur ne supporte pas les canvas... Dommage.
+		</canvas>
+	</div>
+
+</body>
+
+</html>
