@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Test du moteur de jeu</title>
+	<script type="text/javascript">
+
+var context = null;
+var canvas = null;
+
+function Animation(file, callbackWhenReady) {
+
+	var img = new Image();	
+	img.src = file;
+	img.onload = callbackWhenReady;
+	img.onerror = function() { alert("Error while loading spritesheet: " + img.src); };
+
+	var state = -1; 					// -1 : stopped, 0, 1, 2, etc. frame 
+	var decX = 122; 						// horizontal offset between 2 frames
+	var decY = 0; 						// vertical offset between 2 frames
+	var nbFrames = 12;					// number of frames composing the animation
+	var sourceHeight = 275;				// height of frame image in the spritesheet
+	var sourceWidth = 122; //82;				// width of frame image in the spritesheet
+	var ratio = 1;						// set the ratio of the currently displayed image
+	var destHeight = Math.floor(sourceHeight * ratio);		// destination height
+	var destWidth = Math.floor(sourceWidth * ratio);		// source width
+	var sourceSpriteSheetX = 0;
+	var sourceSpriteSheetY = 579;
+	var sourceX = 0;
+	var sourceY = 579;
+	var flip = 0;
+
+	/**
+	 *	Changes the current coordinates of the displayed picture.
+	 */
+	this.setXY = function(_x, _y) {
+		x = _x;
+		y = _y;	
+	}
+	
+	/**
+	 *	Sets the new ratio for image display.
+	 */
+	this.setRatio = function(nr) {
+		ratio = nr;
+		destHeight = Math.floor(sourceHeight * ratio);	
+		destWidth = Math.floor(sourceWidth * ratio);	
+	}
+
+	this.tick = function() {		
+        // draw cropped image
+        var destX = canvas.width / 2 - destWidth / 2;
+        var destY = canvas.height / 2 - destHeight / 2;
+        if (flip == 1) {
+        	context.save();
+        	context.scale(-1,1);	
+	        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, -canvas.width+destX, destY, destWidth, destHeight);
+			context.restore();	
+        }
+        else {
+	        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+        }
+		if (state >= 0) {
+			state = (state + 1) % nbFrames;
+			sourceX = sourceSpriteSheetX + decX * state;
+			sourceY = sourceSpriteSheetY + decY * state;
+			if (ratio < 1) 
+				this.setRatio(ratio+0.01);
+		}
+	}
+
+	this.play = function() {
+		if (state == -1) {
+			state = 0;
+			sourceX = sourceSpriteSheetX;
+			sourceY = sourceSpriteSheetY;
+		}	
+	}
+	
+	this.isPlaying = function() {
+		return state >= 0;	
+	} 
+	
+	this.stop = function() {
+		if (state >= 0) {
+			state = -1;
+		}	
+	}
+}
+
+
+function init() {
+	canvas = document.getElementById('cvs');		
+	context = canvas.getContext('2d');
+	mainloop();
+}
+
+var anim = new Animation("./SpriteSheet-Monkey3.png", function(){animables[0] = anim; anim.play();	});
+
+var fps = 15;
+
+// Main loop (repeated every 40 ms --25 frames/sec)
+function mainloop() {
+			
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	for (var i=0; i < animables.length; i++) {
+		animables[i].tick();	
+	}
+	setTimeout("requestAnimationFrame(mainloop)", 1000/fps);
+}	
+	
+var animables = [];	
+	
+	</script>
+</head>
+
+<body onload="init()">
+
+	<input type="button" value="Start/Stop" onclick="anim.isPlaying() ? anim.stop() : anim.play();">
+
+	<div style="width: 1004px; margin: 20px auto;">
+		<canvas id="cvs" width="1000" height="560" style="border: solid 2px #000;">
+		Votre navigateur ne supporte pas les canvas... Dommage.
+		</canvas>
+	</div>
+
+
+</body>
+
+</html>
