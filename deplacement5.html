@@ -5,92 +5,60 @@
 	<meta charset="UTF-8">
 	<title>Test déplacement</title>
 	<script src="./js/mesh.js"></script>	
+	<script src="./js/scene.js"></script>	
 	<script type="text/javascript">
 
 var DEBUG = false;
 
-var canvas = null;
-var context = null;
+var currentScene = null;
 
-var currentPoint = new Point(515, 508, 1);
-var targetPoint = [];
 
-var CVS_WIDTH = 1000;
-var CVS_HEIGHT = 560;
-
-var OFFSET_X = 0;
-var OFFSET_Y = 0;
-
-var BG_WIDTH = 1092;
-var BG_HEIGHT = 729; 
 
 init = function() {
 	canvas = document.getElementById("cvs");
 	canvas.addEventListener("click", cvsClick, false);
 	context = canvas.getContext("2d");		
-	canvas.style.backgroundImage = "url(images/map2.jpg)";
-	// update display
-	redraw();
+	currentScene = new Scene(canvas, myTestMesh(), "images/map2.jpg", context, callbackWhenReady);
+}
+
+
+callbackWhenReady = function() {
+	currentScene.loadWithLocation(new Point(515, 508, 1));
+	currentScene.redraw();	
 	mainloop();
 }
 
 var fps = 40;
 // Main loop
 mainloop = function() {
-	if (targetPoint.length > 0) {
-		// update important data
-		nextPoint();
+	
+	if (currentScene.nextPoint()) {
 		// update display
-		redraw();
+		currentScene.redraw();
 	}
+
 	// callback			
 	setTimeout("requestAnimationFrame(mainloop)", 1000/fps);
 }
 
 
-var SPEED = 8;
 
 
 cvsClick = function(event) {
-	var closest = mesh.getClosestPointAndSegment(getPosition(event));
-	var pDest = closest.point;
-	var segDest = closest.segment;
-	pDest.zoom = getZoom(pDest, segDest.getPoint1(), segDest.getPoint2());
-	var segSource = mesh.getClosestPointAndSegment(currentPoint).segment;
-	var pathToTarget = mesh.getPathFromTo(currentPoint, segSource, pDest, segDest);
-	targetPoint = [];
-	for (i=1; i < pathToTarget.length; i++) {
-		targetPoint.push(new Point(pathToTarget[pathToTarget.length - 1 - i].x, 
-								   pathToTarget[pathToTarget.length - 1 - i].y, 
-								   pathToTarget[pathToTarget.length - 1 - i].zoom));
-	}
+	var newPoint = getPosition(event, currentScene.getOFFSET_X(), currentScene.getOFFSET_Y());
+	currentScene.click(newPoint);
 }
-
-
-getZoom = function(p, p1, p2) {
-	
-	if (p1.zoom == p2.zoom)
-		return p1.zoom;
-	
-	var distanceP1P2 = p1.distanceTo(p2);
-	var distancePP1 = p.distanceTo(p1);
-	
-	// ratio distance w.r.t. P1
-	var ratio = distancePP1 / distanceP1P2;
-	return p1.zoom + (ratio * (p2.zoom - p1.zoom));		
-}
-
-
-
 
 
 
 /**
  *	Retrieves the clicked point from the mouse event
- *	@param	Event	event	The clicked event
- *	@return	Point			The clicked point	
+ *	@param	Event	event		The clicked event
+ *	@param	int		OFFSET_X	X offset 
+ *	@param	int		OFFSET_Y	Y offset
+ *	@return	Point				The clicked point	
  */
-getPosition = function(event) {
+getPosition = function(event, OFFSET_X, OFFSET_Y) {
 	
 	// gets the click coordinates
 	if (event.x != undefined && event.y != undefined) {
@@ -182,72 +150,10 @@ myTestMesh = function() {
 	m.addSegment(new Segment(p17, p18));
 	m.addSegment(new Segment(p1, p18));
 
-
-	
-	/*
-	
-	
-	p1 = new Point(2061, 156, 1);
-	p2 = new Point(1770, 255, 1);
-	m.addSegment(new Segment(p1, p2, 1));
-	p3 = new Point(1587, 270, 1);
-	m.addSegment(new Segment(p2, p3, 1));
-	p4 = new Point(1404,252, 1);
-	m.addSegment(new Segment(p3, p4, 1));
-	
-	p5 = new Point(1116, 288, 1);
-	m.addSegment(new Segment(p4, p5, 1));
-	
-	p6 = new Point(1180, 216, 0.75);
-	m.addSegment(new Segment(p5, p6, 0.75));
-	
-	p7 = new Point(882,282);
-	m.addSegment(new Segment(p5, p7, 1));
-	
-	p8 = new Point(771,276);
-	m.addSegment(new Segment(p7, p8, 1));
-	
-	p9 = new Point(705,306, 1.1);
-	m.addSegment(new Segment(p8, p9, 1));
-	
-	p10 = new Point(822,375, 1.3);
-	m.addSegment(new Segment(p9, p10, 1));
-
-	p11 = new Point(873,435, 1.4);
-	m.addSegment(new Segment(p10, p11, 1));
-	
-	p12 = new Point(696,261);
-	m.addSegment(new Segment(p8, p12, 1));
-	
-	p13 = new Point(582,273);
-	m.addSegment(new Segment(p12, p13, 1));
-
-	p14 = new Point(462,249, 0.9);
-	m.addSegment(new Segment(p13, p14, 0.7));
-
-	p15 = new Point(513,183,0.6);
-	m.addSegment(new Segment(p14, p15, 0.4));
-
-	p16 = new Point(426,297);
-	m.addSegment(new Segment(p13, p16, 1));
-
-	p17 = new Point(228,300);
-	m.addSegment(new Segment(p16, p17, 1));
-	
-	p18 = new Point(201,276);
-	m.addSegment(new Segment(p17, p18, 1));
-
-*/
-	
-	return m;	
-
+	return m;
 }
 
-var mesh = myTestMesh();
-
-
-
-	</script>
+		</script>
 </head>
 
 <body onload="init()">

@@ -218,32 +218,27 @@ function Mesh() {
 	/**
 	 *	Displays the mesh in the canvas. 
 	 */
-	this.display = function() {
+	this.display = function(context, OFFSET_X, OFFSET_Y) {
 		// display points
+
+	/*
 		for (var i in points) {
-			drawPoint(points[i]);
-		}	
+			var size = points[i].zoom * 10;
+			context.fillRect(points[i].x-size/2 + OFFSET_X, points[i].y-size/2 + OFFSET_Y, size, size);	
+		}
+	*/	
 		// draw segments 
 		for (var i in segments) {
 			context.beginPath();
-			context.fillText(segments[i].getPoint1().toString(), segments[i].getPoint1().x - 15 + OFFSET_X, segments[i].getPoint1().y - 15 + OFFSET_Y);
-			context.fillText(segments[i].getPoint2().toString(), segments[i].getPoint2().x - 15 + OFFSET_X, segments[i].getPoint2().y - 15 + OFFSET_Y);
+//			context.fillText(segments[i].getPoint1().toString(), segments[i].getPoint1().x - 15 + OFFSET_X, segments[i].getPoint1().y - 15 + OFFSET_Y);
+//			context.fillText(segments[i].getPoint2().toString(), segments[i].getPoint2().x - 15 + OFFSET_X, segments[i].getPoint2().y - 15 + OFFSET_Y);
 			context.moveTo(segments[i].getPoint1().x + OFFSET_X, segments[i].getPoint1().y + OFFSET_Y);
 			context.lineTo(segments[i].getPoint2().x + OFFSET_X, segments[i].getPoint2().y + OFFSET_Y);
 			context.stroke();
 		}
 	}
 	
-	
-	/**
-	 *	Draws a point on the canvas with a 10x10 square.
-	 *	@param	Point 	p 	the point to draw 
-	 */
-	drawPoint = function(p) {
-		var size = p.zoom * 10;
-		context.fillRect(p.x-size/2 + OFFSET_X, p.y-size/2 + OFFSET_Y, size, size);	
-	}
-	
+		
 	
 
 	/**
