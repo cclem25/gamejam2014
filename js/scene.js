@@ -10,7 +10,11 @@
  * 	@param 	_mesh		The mesh to consider
  *	@param	_bg			The background image to use
  */
-function Scene(_cvs, _mesh, _bg, _ctx, callback) {
+function Scene(_name, _cvs, _mesh, _bg, _ctx, callback) {
+	
+	// scene name
+	var name = _name;
+	this.getName = function() { return name; }
 	
 	// canvas object
 	var canvas = _cvs;
@@ -24,16 +28,8 @@ function Scene(_cvs, _mesh, _bg, _ctx, callback) {
 	var BG_WIDTH = 0;
 	var BG_HEIGHT = 0; 	
 	
-	var imgBG = new Image();	
-	imgBG.src = _bg;
-	imgBG.onload = function() {
-		// background image 
-		canvas.style.backgroundImage = "url(" + imgBG.src + ")";
-		BG_WIDTH = imgBG.width;
-		BG_HEIGHT = imgBG.height; 	
-		callback();
-	};
-	imgBG.onerror = function() { console.log("Error while loading background: " + imgBG.src); };
+	// callback function 
+	var callbackWhenReady = callback;
 
 	// targets points (define the path to follow when the character is moving)
 	var targetPoint = [];
@@ -58,7 +54,18 @@ function Scene(_cvs, _mesh, _bg, _ctx, callback) {
 	 *	@param startingPoint 
 	 */
 	this.loadWithLocation = function(startingPoint) {
+		var imgBG = new Image();	
+		imgBG.src = _bg;
+		imgBG.onload = function() {
+			// background image 
+			canvas.style.backgroundImage = "url(" + imgBG.src + ")";
+			BG_WIDTH = imgBG.width;
+			BG_HEIGHT = imgBG.height; 	
+			callbackWhenReady();
+		};
+		imgBG.onerror = function() { console.log("Error while loading background: " + imgBG.src); };
 		currentPoint = startingPoint;
+		
 	}
 	
 	
