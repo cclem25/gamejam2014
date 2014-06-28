@@ -9,13 +9,26 @@ initGame = function(canvas) {
 	game = new Game(canvas);
 	
 	// scene 1 : map
-	game.addScene(new Scene("map", canvas, meshMap(), "gamedata/images/map2.jpg", context, callbackWhenReady));	
+	map = new Scene("map", canvas, meshMap(), "gamedata/images/map2.jpg", context, callbackWhenReady);
+	game.addScene(map);	
 	
 	// scene 2 : exterieur aqua
-	game.addScene(new Scene("exterieurAqua", canvas, meshExterieurAqua(), "gamedata/images/exterieurAqua.jpg", context, callbackWhenReady));
+	extAqua = new Scene("exterieurAqua", canvas, meshExterieurAqua(), "gamedata/images/exterieurAqua.jpg", context, callbackWhenReady);
+	game.addScene(extAqua);
 
 	// scene 3
 	//game.addScene(new Scene("amphiA", canvas, meshAmphiA(), "gamedata/images/amphiA.jpg", context, callbackWhenReady));
+
+
+
+	//--------- passages -----//
+	/* Map */
+	map.addPassage(new Passage(510, 580, extAqua, new Point(817, 468)));	
+	map.addPassage(new Passage(583, 163, extAqua, new Point(817, 468)));	
+	
+	/* Aqua */
+	extAqua.addPassage(new Passage(10, 540, map, new Point(410,630)));
+	extAqua.addPassage(new Passage(1623, 450, map, new Point(517,662)));
 
 	return game;	
 }
@@ -27,25 +40,17 @@ initGame = function(canvas) {
 /** Mesh pour la MAP */
 meshMap = function() {
 	var m = new Mesh();
-	
-	pAqua = new Point(515, 508, 1);
-	
-	pEntreeUFRST = new Point(332, 520, 1);
-	
+			
 	pEntreeBatC = new Point(310, 155);
-	
-	pEntreeImprimerie = new Point(560, 141);
-	
+		
 	pEntreeBatG = new Point(950,30);
 	
-	pEntreeAmphiA = new Point(563, 532);
-	
 	// intermédiaire aqua <-> amphi A
-	p1 = new Point(510, 540);
+	p1 = new Point(510, 580);
 	// devant entree UFR 
-	p2 = new Point(355, 565);
+	p2 = new Point(410, 630);
 	// au bout du batiment 
-	p3 = new Point(45, 545);
+	p3 = new Point(35, 670);
 	// au bout en haut du batiment B
 	p4 = new Point(50, 440);
 	// derrière bat B
@@ -73,15 +78,11 @@ meshMap = function() {
 	p18 = new Point(522, 704);
 
 	
-	m.addSegment(new Segment(pAqua, p1));
-	m.addSegment(new Segment(p1, pEntreeAmphiA));
 	m.addSegment(new Segment(p1, p2));
-	m.addSegment(new Segment(p2, pEntreeUFRST));
-	m.addSegment(new Segment(p3, pEntreeUFRST));
+	m.addSegment(new Segment(p2, p3));
 	m.addSegment(new Segment(p3, p4));
 	m.addSegment(new Segment(p4, p5));
 	m.addSegment(new Segment(p5, p6));
-	m.addSegment(new Segment(p6, pEntreeImprimerie));
 	m.addSegment(new Segment(p6, p7));
 	m.addSegment(new Segment(p7, p8));
 	m.addSegment(new Segment(p8, pEntreeBatC));
