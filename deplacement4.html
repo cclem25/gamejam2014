@@ -21,14 +21,14 @@ var CVS_HEIGHT = 560;
 var OFFSET_X = 0;
 var OFFSET_Y = 0;
 
-var BG_WIDTH = 2197;
-var BG_HEIGHT = 560; 
+var BG_WIDTH = 1247;
+var BG_HEIGHT = 853; 
 
 init = function() {
 	canvas = document.getElementById("cvs");
 	canvas.addEventListener("click", cvsClick, false);
 	context = canvas.getContext("2d");		
-	canvas.style.backgroundImage = "url(mi2.png)";
+	canvas.style.backgroundImage = "url(images/map.png)";
 	// update display
 	redraw();
 	mainloop();
