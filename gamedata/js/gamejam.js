@@ -22,8 +22,7 @@ initGame = function(canvas) {
 	game.addScene(amphiA);
 
 	// Scène Aqua
-
-	aqua = new Scene("Aqua", canvas, meshAqua(), "gamedata/images/IMGP3708.JPG", context, callbackWhenReady);
+	aqua = new Scene("Aqua", canvas, meshAqua(), "gamedata/images/aqua.jpg", context, callbackWhenReady);
 	game.addScene(aqua);
 
 	scolarite = new Scene("scolarite", canvas, meshScolarite(), "gamedata/images/IMGP3711.JPG", context, callbackWhenReady);
@@ -40,13 +39,14 @@ initGame = function(canvas) {
 	extAqua.addPassage(new Passage(10, 540, map, new Point(410,630)));
 	extAqua.addPassage(new Passage(1623, 450, map, new Point(517,662)));
 	extAqua.addPassage(new Passage(1478, 402, amphiA, new Point(965, 372, 0.3)));
-	extAqua.addPassage(new Passage(805, 391, aqua ,new Point(1000, 1000)));
+	extAqua.addPassage(new Passage(805, 391, aqua ,new Point(910,540)));
 	extAqua.addPassage(new Passage(320, 305, scolarite ,new Point(1000, 1000)));
 
 	/* AmphiA */
 	amphiA.addPassage(new Passage(965, 372, extAqua, new Point(1478, 402)));
 
 	/* Aqua intérieur */
+	aqua.addPassage(new Passage(1200, 430, extAqua, new Point(805, 391)));
 
 	/* Scolarité */
 
@@ -169,7 +169,17 @@ meshAmphiA = function(){
 
 meshAqua = function(){
 	var m = new Mesh();
-	var pPorte = new Point(1965, 372);
+	var pPorte = new Point(1200, 430);
+	var p0 = new Point(1200, 514);
+	var p1 = new Point(910,540);
+	var pPaperboard = new Point(484, 488);
+	var pCroissants = new Point(268,378);
+	
+	m.addSegment(new Segment(pPorte,p0));
+	m.addSegment(new Segment(p1,p0));
+	m.addSegment(new Segment(pPaperboard,p1));
+	m.addSegment(new Segment(pPaperboard,pCroissants));
+	
 	return m;
 }
 

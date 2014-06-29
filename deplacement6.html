@@ -4,6 +4,15 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Test déplacement</title>
+	<style type="text/css">
+.bcInv {
+	float: left; 
+	width: 139px;
+	height: 86px;		
+	background: #FFFFFF;
+}	
+	</style>
+	
 	<script src="./js/mesh.js"></script>	
 	<script src="./js/scene.js"></script>	
 	<script src="./js/game.js"></script>	
@@ -52,6 +61,17 @@ cvsClick = function(event) {
 }
 
 
+clickInventory = function(i) {
+	if (game.currentAction == game.NO_ACTION) {
+		var obj = game.getInventory(i);
+		if (obj != null) {
+			game.setSelectedObject = obj;
+			game.updateInventory();			 	
+		}
+	}
+}
+
+
 
 /**
  *	Retrieves the clicked point from the mouse event
@@ -81,10 +101,19 @@ getPosition = function(event, OFFSET_X, OFFSET_Y) {
 
 <body onload="init()">
 
-	<div style="width: 1004px; margin: 20px auto;">
-		<canvas id="cvs" width="1000" height="560" style="border: solid 2px #000;">
+	<div style="width: 1004px; height: 564px; margin: 20px auto;">
+		<canvas id="cvs" width="1000" height="470" style="border: solid 2px #000;">
 		Votre navigateur ne supporte pas les canvas... Dommage.
 		</canvas>
+		<div id="bcInventory" style="float: left; bottom: 0px;" >
+			<div id="bcInv0" class="bcInv" onclick="clickInventory(0)";></div>
+			<div id="bcInv1" class="bcInv" onclick="clickInventory(1)";></div>
+			<div id="bcInv2" class="bcInv" onclick="clickInventory(2)";></div>
+			<div id="bcInv3" class="bcInv" onclick="clickInventory(3)";></div>
+			<div id="bcInv4" class="bcInv" onclick="clickInventory(4)";></div>
+			<div id="bcInv5" class="bcInv" onclick="clickInventory(5)";></div>
+			<div id="bcInv6" class="bcInv" onclick="clickInventory(6)";></div>
+		</div>
 	</div>
 
 

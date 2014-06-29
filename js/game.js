@@ -23,7 +23,7 @@ function Game(_cvs) {
 	this.currentAction = 4;
 	
 	/** selected object */
-	var selectedObject = null;
+	this.selectedObject = null;
 	
 	// Disabling of right button 	
 	_cvs.oncontextmenu = function(event) {
@@ -123,7 +123,7 @@ function Game(_cvs) {
 			case this.USE:
 				board.style.cursor = "url(./images/main.png) 3 5, auto";
 				break; 	
-//			case this.USE_WITH:			
+//			case USE_WITH:			
 //				board.style.cursor = selectedObject.getCodeToDisplayImageAsCursor();
 //				break;
 		}
