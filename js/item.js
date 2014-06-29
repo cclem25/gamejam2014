@@ -4,7 +4,7 @@
  *	Design of items (objects) inside a scene
  */
 
-function Item(_id, _spInScene, _spInInventory) {
+function Item(_id, _spInScene, _x, _y, _spInInventory) {
 
 	// id of the object
 	var id = _id;
@@ -15,6 +15,11 @@ function Item(_id, _spInScene, _spInInventory) {
 	if (_spInScene != null) { 
 		this.spriteInScene.src = _spInScene; 
 	}
+
+	// coordinates
+	this.x = _x;
+	this.y = _y;
+
 
 	// sprite of the object in the inventory
 	this.spriteInInventory = _spInInventory; 	
@@ -55,6 +60,8 @@ function Item(_id, _spInScene, _spInInventory) {
 
 function InteractiveArea(_id, _point, _radius) {
 
+	this.id = _id;
+
 	// id of the area
 	this.isVisible = function() { return true; }
 	
@@ -93,6 +100,16 @@ function Inventory() {
 	this.getItem = function(i) {
 		return (i < items.length) ? items[i] : null;
 	}	
+	
+	// checks if the inventory contains a given item
+	this.containsItem = function(id) {
+		for (var i in items) {
+			if (items[i].id == id) {
+				return true;	
+			}	
+		}	
+		return false;
+	} 
 		
 	// update inventory in display
 	this.updateInDisplay = function() {

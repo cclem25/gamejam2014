@@ -43,7 +43,7 @@ initGame = function(canvas) {
 	game.addScene(biochimie);
 
 	//Scène BatimentC
-	batimentC = new Scene("BatimentC", canvas, meshBatimentC(), "gamedata/images/batimentC.JPG", context, callbackWhenReady);
+	batimentC = new Scene("BatimentC", canvas, meshBatimentC(), "gamedata/images/laboInfo.jpg", context, callbackWhenReady);
 	game.addScene(batimentC);
 
 
@@ -85,10 +85,15 @@ initGame = function(canvas) {
 	//---- Items ----
 	
 	// croissants 
-	var croissant = new Item("croissant",null,"./gamedata/images/croissant.png");
-	croissant.onLookAtInInventory =function() { alert("C'est un croissant, il a l'air bon."); }
+	var croissant = new Item("croissant",null,0,0,"./gamedata/images/croissant.png");
+	croissant.onLookAtInInventory = function() { 
+		game.removeAllMessages();
+		game.messagesToDisplay.push(new Message("C'est un croissant, il a l'air bon.", COLOR_JORIS, 20, 20, 3000));	
+		game.displayMessages();
+	}
 	croissant.onUseInInventory = function() {
 		if (game.getCurrentScene().getName() == "amphiA") {
+			game.removeAllMessages();
 			game.messagesToDisplay.push(new Message("Crunch crunch", COLOR_JORIS, 20, 20, 3000));	
 			game.messagesToDisplay.push(new Message("Hummm c'était bon", COLOR_JORIS, 20, 20, 3000));	
 			game.messagesToDisplay.push(new Message("Alerte", COLOR_ALERT, 400, 20, 500));	
@@ -101,10 +106,51 @@ initGame = function(canvas) {
 			game.displayMessages();
 		}	
 		else {
-			alert("Non, pas maintenant, je préfère le garder pour plus tard");	
+			game.removeAllMessages();
+			game.messagesToDisplay.push(new Message("Non, pas maintenant, je préfère le garder pour plus tard", COLOR_JORIS, 20, 20, 3000));	
+			game.displayMessages();
 		}
 	}	
-	game.getInventory().addItem(croissant);
+	game.allObjects["croissant"] = croissant;
+	
+	// cable reseau	
+	 // TODO
+	 
+	 
+	// zoneCroissants
+	iaCroissants = new InteractiveArea("iaCroissant", new Point(330,285), 30)
+	iaCroissants.onLookAtInScene = function() {
+		game.removeAllMessages();
+		game.messagesToDisplay.push(new Message("Miam, des croissants !", COLOR_JORIS, 20, 20, 3000));	
+		game.displayMessages();
+	}	
+	iaCroissants.onUse = function() {
+		if (game.getInventory().containsItem("croissant")) {
+			game.removeAllMessages();
+			game.messagesToDisplay.push(new Message("J'en ai déjà pris un.", COLOR_JORIS, 20, 20, 3000));	
+			game.displayMessages();
+			return;
+		}	
+		game.addItemToInventory("croissant");
+		game.removeAllMessages();
+		game.messagesToDisplay.push(new Message("Et hop, dans la poche.", COLOR_JORIS, 20, 20, 3000));	
+		game.displayMessages();
+	}
+	aqua.addInteractiveArea(iaCroissants)
+
+
+	// zone tableau
+	iaTableau = new InteractiveArea("iaTableau", new Point(528, 270), 60);
+	iaTableau.onLookAtInScene = function() {
+		game.removeAllMessages();
+		game.messagesToDisplay.push(new Message("C'est le thème de la Game Jam...", COLOR_JORIS, 20, 20, 3000));	
+		game.messagesToDisplay.push(new Message("C'est plein de symboles bizarres :-(", COLOR_JORIS, 20, 20, 3000));	
+		game.messagesToDisplay.push(new Message("Si seulement j'avais assisté sérieusement aux cours de Maths au lieu d'être tout le temps à l'Aqua...", COLOR_JORIS, 20, 20, 3000));	
+		game.messagesToDisplay.push(new Message("Je devrais peut-être trouver un prof de Maths pour m'aider.", COLOR_JORIS, 20, 20, 3000));	
+		game.messagesToDisplay.push(new Message("Je crois qu'il sont au 3e étage du batiment B.", COLOR_JORIS, 20, 20, 3000));	
+		game.displayMessages();
+	}
+	aqua.addInteractiveArea(iaTableau);
 
 	return game;	
 }

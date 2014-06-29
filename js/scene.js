@@ -53,8 +53,15 @@ function Scene(_name, _cvs, _mesh, _bg, _ctx, callback) {
 	// movement speed
 	var SPEED = 8;
 
+	// set of passages
 	var passages = [];
 
+	// set of objects 
+	var objects = [];
+	
+	// set of interactive areas
+	var interactiveAreas = [];
+	
 
 	/**
 	 *	@param startingPoint 
@@ -116,6 +123,11 @@ function Scene(_name, _cvs, _mesh, _bg, _ctx, callback) {
 				context.drawImage(imgPOI, passages[i].point.x + OFFSET_X - imgPOI.width/2, passages[i].point.y + OFFSET_Y - imgPOI.height/2);
 			}
 		}
+		
+		// display the objects : 
+		for (var i in objects) {
+			context.drawImage(objects[i].spriteInScene, objects[i].x, objects[i].y);	
+		}
 				
 		// display of the character
 		context.beginPath();
@@ -149,6 +161,21 @@ function Scene(_name, _cvs, _mesh, _bg, _ctx, callback) {
 		
 		if (game.currentAction == game.LOOK_AT) {
 			// TODO check if something can be seen in the scene (huhuhu)
+			for (var i in objects) {
+				if (clickedPoint.x >= objects[i].x && clickedPoint.x <= objects[i].x + objects[i].spriteInScene.width &&
+					clickedPoint.y >= objects[i].y && clickedPoint.y <= objects[i].y + objects[i].spriteInScene.height) {
+					if (objects[i].onLookAt != null) {
+						objects[i].onLookAt();	
+					}		
+				}	
+			}
+			for (var i in interactiveAreas) {
+				if (interactiveAreas[i].getPosition().distanceTo(clickedPoint) <= interactiveAreas[i].getRadius()) {
+					if (interactiveAreas[i].onLookAtInScene != null) {
+						interactiveAreas[i].onLookAtInScene();	
+					}		
+				}	
+			}
 			return;	
 		}		
 		
@@ -169,13 +196,31 @@ function Scene(_name, _cvs, _mesh, _bg, _ctx, callback) {
 			// clicked on a POI --> change scene
 			for (var i in passages) {
 				if (clickedPoint.distanceTo(passages[i].point) < 18) {
-					actionWhenPointIsReached = new Passage(passages[i].point.x,passages[i].point.y, passages[i].toScene, passages[i].startingPoint);
+					actionWhenPointIsReached = new Action("passage", new Passage(passages[i].point.x,passages[i].point.y, passages[i].toScene, passages[i].startingPoint));
 					return;	
 				}
 			}
 		}		
-		if (game.currentAction == game.USE) {
-			// TODO check if we match a given area	
+		if (game.currentAction == game.USE || game.currentAction == game.USE_WITH) {
+			// TODO check if we match a given object	
+			for (var i in objects) {
+				if (clickedPoint.x >= objects[i].x && clickedPoint.x <= objects[i].x + objects[i].spriteInScene.width &&
+					clickedPoint.y >= objects[i].y && clickedPoint.y <= objects[i].y + objects[i].spriteInScene.height) {
+					if (objects[i].onUseInScene != null) {
+						var kind = (game.currentAction == game.USE) ? "use" : "use_with"; 
+						actionWhenPointIsReached = new Action(kind, objects[i].onUseInScene());	
+					}		
+				}	
+			}
+			
+			for (var i in interactiveAreas) {
+				if (interactiveAreas[i].getPosition().distanceTo(clickedPoint) <= interactiveAreas[i].getRadius()) {
+					if (interactiveAreas[i].onUse != null) {
+						var kind = (game.currentAction == game.USE) ? "use" : "use_with"; 
+						actionWhenPointIsReached = new Action(kind, interactiveAreas[i].onUse);	
+					}		
+				}	
+			}
 		}
 	}
 
@@ -227,9 +272,17 @@ function Scene(_name, _cvs, _mesh, _bg, _ctx, callback) {
 			if (targetPoint.length == 0) {
 				// target reached
 				if (actionWhenPointIsReached != null) {
-					game.setCurrentScene(actionWhenPointIsReached.toScene.getName());
-					game.getCurrentScene().loadWithLocation(actionWhenPointIsReached.startingPoint);
-					actionWhenPointIsReached = null;
+					if (actionWhenPointIsReached.kind == 'passage') {
+						game.setCurrentScene(actionWhenPointIsReached.param.toScene.getName());
+						game.getCurrentScene().loadWithLocation(actionWhenPointIsReached.param.startingPoint);
+						actionWhenPointIsReached = null;
+						return;
+					}
+					if (actionWhenPointIsReached.kind == 'use') {
+						actionWhenPointIsReached.param();
+						actionWhenPointIsReached = null;
+						return;	
+					}
 				}	
 			}
 			return;
@@ -256,6 +309,24 @@ function Scene(_name, _cvs, _mesh, _bg, _ctx, callback) {
 	 */
 	this.addPassage = function(p) {
 		passages[passages.length] = p;	
+	}
+
+
+	/**
+	 *	Adds an item to a scene
+	 *	@param p	Item		the item to add
+	 */
+	this.addObject = function(o) {
+		objects[objects.length] = o;	
+	}
+
+
+	/**
+	 *	Adds an interactive area to a scene
+	 *	@param ia	InteractiveArea		the interactive area to add
+	 */
+	this.addInteractiveArea = function(ia) {
+		interactiveAreas[interactiveAreas.length] = ia;	
 	}
 
 }
@@ -285,4 +356,11 @@ function Passage(_x, _y, _toScene, _startingPoint) {
 				"\nstartingPoint = " + this.startingPoint;  	
 	}
 		
+}
+
+
+
+function Action(_kind, _param) {
+	this.kind = _kind;
+	this.param = _param;	
 }
