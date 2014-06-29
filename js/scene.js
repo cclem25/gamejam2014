@@ -147,6 +147,11 @@ function Scene(_name, _cvs, _mesh, _bg, _ctx, callback) {
 	 */
 	this.click = function(clickedPoint) {
 		
+		if (game.currentAction == game.LOOK_AT) {
+			// TODO check if something can be seen in the scene (huhuhu)
+			return;	
+		}		
+		
 		var closest = mesh.getClosestPointAndSegment(clickedPoint);
 		var pDest = closest.point;
 		var segDest = closest.segment;
@@ -160,14 +165,18 @@ function Scene(_name, _cvs, _mesh, _bg, _ctx, callback) {
 									   pathToTarget[pathToTarget.length - 1 - i].zoom));
 		}
 
-		// clicked on a POI --> change scene
-		for (var i in passages) {
-			if (clickedPoint.distanceTo(passages[i].point) < 18) {
-				actionWhenPointIsReached = new Passage(passages[i].point.x,passages[i].point.y, passages[i].toScene, passages[i].startingPoint);
-				return;	
+		if (game.currentAction == game.NO_ACTION) {
+			// clicked on a POI --> change scene
+			for (var i in passages) {
+				if (clickedPoint.distanceTo(passages[i].point) < 18) {
+					actionWhenPointIsReached = new Passage(passages[i].point.x,passages[i].point.y, passages[i].toScene, passages[i].startingPoint);
+					return;	
+				}
 			}
+		}		
+		if (game.currentAction == game.USE) {
+			// TODO check if we match a given area	
 		}
-		
 	}
 
 

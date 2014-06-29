@@ -34,6 +34,10 @@ function Game(_cvs) {
 		return false;
 	}
 	
+	// List of messages that have to be displayed  
+	this.messagesToDisplay = [];
+	this.currentTimeout = null;
+	
 	
 	//---- GAME VARIABLES ---- 
 	
@@ -43,7 +47,7 @@ function Game(_cvs) {
 	 *	@return		the variable value
 	 */	
 	this.getVariableValue = function(n) {
-		
+		return variables[n];
 	}
 	
 	/**
@@ -120,7 +124,7 @@ function Game(_cvs) {
 		var board = document.getElementById("gamearea");
 		switch (this.currentAction) {
 			case this.NO_ACTION:
-				board.style.cursor = "url(./images/cursor.png) 12 0, auto";
+				board.style.cursor = "url(./images/cursor.png) 0 0, auto";
 				break;
 			case this.LOOK_AT: 
 				board.style.cursor = "url(./images/yeux.png) 25 16, auto";
@@ -156,7 +160,34 @@ function Game(_cvs) {
 	this.getSelectedObject = function() {
 		return selectedObject;	
 	}
-		
+	
+	
+	/** 
+	 *	Display a message
+	 */
+	this.displayMessages = function() {
+		if (this.messagesToDisplay.length > 0) {
+			// removes the first element
+			var msg = this.messagesToDisplay.shift(); 
+			var bcTxt = document.getElementById("bcText");
+			bcTxt.style.color = msg.color;
+			bcTxt.style.marginTop = msg.x + "px";
+			bcTxt.style.marginLeft = msg.y + "px";
+			bcTxt.innerHTML = msg.text;
+			this.currentTimeout = setTimeout("game.displayMessages()", msg.duration);  
+		}
+		else {
+			document.getElementById("bcText").innerHTML = "";
+			this.currentTimeout = null;
+		}
+	}
+	
+	
+	this.removeAllMessages = function() {
+		this.messagesToDisplay = [];	
+		this.displayMessages();
+	}
+			
 }
 
 
