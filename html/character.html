@@ -13,7 +13,7 @@
 	init = function() {
 		canvas = document.getElementById("cvs");
 		context = canvas.getContext("2d");		
-		currentAnimation = new character("../images/SpriteSheet-Monkey3.png", "SE", 0, callbackWhenReady);
+		currentAnimation = new character("../gamedata/images/SpriteSheet-Monkey3_EDITED.png", "W", 1, callbackWhenReady);
 	}
 
 	/*callbackWhenReady = function() {
@@ -33,7 +33,7 @@
 		
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		for (var i=0; i < animables.length; i++) {
-			animables[i].draw(context, 10, 10, 1);
+			animables[i].draw(context, 500, 300, 1);
 			//animables[i].setXY(100+i, 40);
 		}
 		setTimeout("requestAnimationFrame(mainloop)", 1000/fps);
@@ -45,7 +45,7 @@
 <body onload="init()">
 
 	<div style="width: 1004px; margin: 20px auto;">
-		<canvas id="cvs" width="1000" height="560" style="border: solid 2px #000;">
+		<canvas id="cvs" width="1000" height="560" style="background: #AAAAFF; border: solid 2px #000;">
 		Votre navigateur ne supporte pas les canvas... Dommage.
 		</canvas>
 	</div>
