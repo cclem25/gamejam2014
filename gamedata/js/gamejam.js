@@ -3,6 +3,12 @@
  *	
  */
 
+var COLOR_JORIS = "#5555FF";
+var COLOR_BERNARD = "#BB0000";
+var COLOR_ANSEL = "#00BB00";
+var COLOR_NARRATEUR = "#FFFFFF";
+var COLOR_ALERT = "#FCFC0A";
+
 initGame = function(canvas) {
 	
 	// game
@@ -76,7 +82,16 @@ initGame = function(canvas) {
 	croissant.onLookAtInInventory =function() { alert("C'est un croissant, il a l'air bon."); }
 	croissant.onUseInInventory = function() {
 		if (game.getCurrentScene().getName() == "amphiA") {
-			alert("Crunch crunch");	
+			game.messagesToDisplay.push(new Message("Crunch crunch", COLOR_JORIS, 20, 20, 3000));	
+			game.messagesToDisplay.push(new Message("Hummm c'était bon", COLOR_JORIS, 20, 20, 3000));	
+			game.messagesToDisplay.push(new Message("Alerte", COLOR_ALERT, 400, 20, 500));	
+			game.messagesToDisplay.push(new Message("Alerte", COLOR_ALERT, 300, 200, 500));	
+			game.messagesToDisplay.push(new Message("Alerte", COLOR_ALERT, 100, 400, 500));	
+			game.messagesToDisplay.push(new Message("Alerte", COLOR_ALERT, 700, 20, 500));	
+			game.messagesToDisplay.push(new Message("Quelqu'un mange dans l'amphi !", COLOR_ALERT, 400, 20, 500));	
+			game.messagesToDisplay.push(new Message("Quelqu'un mange dans l'amphi !", COLOR_ALERT, 100, 500, 500));	
+			game.messagesToDisplay.push(new Message("Oh oh...", COLOR_JORIS, 20, 20, 3000));	
+			game.displayMessages();
 		}	
 		else {
 			alert("Non, pas maintenant, je préfère le garder pour plus tard");	
@@ -214,19 +229,16 @@ meshAmphiA = function(){
 
 meshAqua = function(){
 	var m = new Mesh();
-
-	var pPorte = new Point(1132, 286); 
-	var p0 = new Point(916, 234, 0.3);
-	var p1 = new Point(913, 326, 0.5);
-	var p2 = new Point(755, 565);
-	var p3 = new Point(395, 550);
-	var p4 = new Point(138, 341, 0.2);
-
-	m.addSegment(new Segment(pPorte, p1));
-	m.addSegment(new Segment(p1, p0));
-	m.addSegment(new Segment(p1, p2));
-	m.addSegment(new Segment(p2, p3));
-	m.addSegment(new Segment(p3, p4, 0.3));
+	var pPorte = new Point(1200, 430);
+	var p0 = new Point(1200, 514);
+	var p1 = new Point(910,540);
+	var pPaperboard = new Point(484, 488);
+	var pCroissants = new Point(268,378);
+	
+	m.addSegment(new Segment(pPorte,p0));
+	m.addSegment(new Segment(p1,p0));
+	m.addSegment(new Segment(pPaperboard,p1));
+	m.addSegment(new Segment(pPaperboard,pCroissants));
 	
 	return m;
 }

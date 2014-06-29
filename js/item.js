@@ -119,8 +119,22 @@ function Inventory() {
 	}
 	
 	this.updateInDisplay();	
+}
 
-	 	
+
+
+function Message(_txt, _color, _x, _y, _duration) {
+	
+	// Text of the message
+	this.text = _txt;
+	// Color of the message
+	this.color = _color;
+	// Duration of the message
+	this.duration = _duration;
+	// X coordinate of the message
+	this.x = _x;
+	// Y coordinate of the message
+	this.y = _y;
 		
 }
 
