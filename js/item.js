@@ -8,29 +8,38 @@ function Item(_id, _spInScene, _spInInventory) {
 
 	// id of the object
 	var id = _id;
+	getId = function() { return id; }
 
 	// sprite of the object in the scene
-	var spriteInScene = new Image();
-	spriteInScene.src = _spInScene; 
+	this.spriteInScene = new Image();
+	if (_spInScene != null) { 
+		this.spriteInScene.src = _spInScene; 
+	}
 
 	// sprite of the object in the inventory
-	var spriteInInventory = new Image();
-	spriteInInventory.src = _spInInventory; 	
+	this.spriteInInventory = _spInInventory; 	
 	
 	// check if the object is visible in the scene
 	this.isVisible = function() { return true; }
 	
 	// function to execute when the object is used
-	this.onUse = null; 
+	this.onUseInScene = null; 
+	
+	// function to execute when the object is used
+	this.onUseInInventory = null; 
 	
 	// function to execute when the object is used with another object
-	this.onUseWith = null;
+	this.onUseWithInScene = null;
+	
+	// function to execute when the object is used with another object
+	this.onUseWithInInventory = null;
 	
 	// function to execute when the object is looked in the scene
 	this.onLookAtInScene = null;
 	
 	// function to execute when the object is looked in the inventory
 	this.onLookAtInInventory = null;
+	
 	
 }
 
@@ -67,19 +76,44 @@ function InteractiveArea(_id, _point, _radius) {
 function Inventory() {
 	
 	// Existing items in the inventory
-	items = [];
+	var items = [];
 	
 	// adds an item to the inventory
-	this.addItem(it) {
-		items[items.length] = it;	
+	this.addItem = function(it) {
+		items[items.length] = it;
 	}
 		
+	// returns the ith item
+	this.getItem = function(i) {
+		return (i < items.length) ? items[i] : null;
+	}	
+		
 	// update inventory in display
-	this.updateInDisplay() {
-		for (var i=0; i < 7
-		document.getElementById
+	this.updateInDisplay = function() {
+		for (var i=0; i < 7; i++) {
+			var htmlCode = "";
+			var b = document.getElementById("bcInv" + i);
+			if (i < items.length) {
+				htmlCode = "<img src='" + items[i].spriteInInventory + "'>";
+				if (items[i] != null) {
+					b.style.visibility = "visible";
+					if (items[i] == game.getSelectedObject()) {
+						b.style.backgroundColor = "#FCBA5F";
+					}
+					else {
+						b.style.backgroundColor = "#FFFFFF";
+					}
+				}
+			}	 
+			else {
+				b.style.visibility = "hidden";	
+			}
+			b.innerHTML = htmlCode;
+		}
 	}
 	
+	this.updateInDisplay();	
+
 	 	
 		
 }

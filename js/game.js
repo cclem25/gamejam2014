@@ -17,16 +17,17 @@ function Game(_cvs) {
 	var currentScene = null;
 	
 	/** Inventory */
-	var inventory = new Object();
+	var inventory = new Inventory();
+	this.getInventory = function() { return inventory; }
 	
 	/** Current action */
 	this.currentAction = 4;
 	
 	/** selected object */
-	this.selectedObject = null;
+	var selectedObject = null;
 	
 	// Disabling of right button 	
-	_cvs.oncontextmenu = function(event) {
+	document.getElementById("gamearea").oncontextmenu = function(event) {
 		if (event.button == 2) {
 			game.nextAction();	
 		}
@@ -108,11 +109,15 @@ function Game(_cvs) {
 	this.nextAction = function() {
 		// update the action kind
 		this.currentAction = (this.currentAction + 1) % 4;
-		if (this.currentAction == this.USE_WITH && selectedObject == null) {
+		if (this.currentAction == this.USE_WITH && this.selectedObject == null) {
 			this.currentAction = 0;	
 		}
+		this.updateCursor();
+	}
+	
+	this.updateCursor = function() {
 		// update the cursor shape
-		var board = _cvs;
+		var board = document.getElementById("gamearea");
 		switch (this.currentAction) {
 			case this.NO_ACTION:
 				board.style.cursor = "url(./images/cursor.png) 12 0, auto";
@@ -130,7 +135,22 @@ function Game(_cvs) {
 	}
 
 
+
+	/** 
+	 *	
+	 */
+	this.updateInventoryDisplay = function() {
+		inventory.updateInDisplay();
+	} 
+
 	
+	this.setSelectedObject = function(o) {
+		selectedObject = o;
+	}	
+	
+	this.getSelectedObject = function() {
+		return selectedObject;	
+	}
 		
 }
 
