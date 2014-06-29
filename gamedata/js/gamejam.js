@@ -36,15 +36,19 @@ initGame = function(canvas) {
 	biochimie = new Scene("Biochimie", canvas, meshBiochimie(), "gamedata/images/biochimie.JPG", context, callbackWhenReady);
 	game.addScene(biochimie);
 
+	//Scène BatimentC
+	batimentC = new Scene("BatimentC", canvas, meshBatimentC(), "gamedata/images/batimentC.JPG", context, callbackWhenReady);
+	game.addScene(batimentC);
+
 
 	//--------- passages -----//
 	/* Map */
 	map.addPassage(new Passage(510, 580, extAqua, new Point(817, 468)));
-	map.addPassage(new Passage(583, 163, extAqua, new Point(817, 468)));
+	map.addPassage(new Passage(310, 155, batimentC, new Point(817, 468)));
 	map.addPassage(new Passage(950,30, batimentG, new Point(785, 525)));
 	map.addPassage(new Passage(566, 74, biochimie, new Point(785, 525)));
-	map.addPassage(new Passage(510, 580, extAqua, new Point(817, 468)));	
-	map.addPassage(new Passage(583, 163, extAqua, new Point(817, 468)));
+	//map.addPassage(new Passage(510, 580, extAqua, new Point(817, 468)));	
+	//map.addPassage(new Passage(583, 163, extAqua, new Point(817, 468)));
 	
 	/* Aqua */
 	extAqua.addPassage(new Passage(10, 540, map, new Point(410,630)));
@@ -265,6 +269,14 @@ meshBiochimie = function(){
 	m.addSegment(new Segment(p2, p3));
 	m.addSegment(new Segment(p3, pCendar));
 	m.addSegment(new Segment(p3, pSortieDroite));
+
+	return m;
+}
+
+meshBatimentC = function(){
+	var m = new Mesh();
+
+	var pPorte = new Point(1965, 372);
 
 	return m;
 }
