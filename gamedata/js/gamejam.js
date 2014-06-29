@@ -196,14 +196,18 @@ meshExterieurAqua = function() {
 meshAmphiA = function(){
 	var m = new Mesh();
 
-	var pPorte = new Point(965, 372, 0.3);
-	var pHautEscalier = new Point(1230, 460, 0.4);
-	var pBasEscaliers = new Point(1218, 805, 0.4);
-	var pSiege = new Point(846, 805, 0.4);
+	var pPorte = new Point(1132, 286); 
+	var p0 = new Point(916, 234, 0.3);
+	var p1 = new Point(913, 326, 0.5);
+	var p2 = new Point(755, 565);
+	var p3 = new Point(395, 550);
+	var p4 = new Point(138, 341, 0.2);
 
-	m.addSegment(new Segment(pPorte, pHautEscalier));
-	m.addSegment(new Segment(pHautEscalier, pBasEscaliers));
-	m.addSegment(new Segment(pBasEscaliers, pSiege));
+	m.addSegment(new Segment(pPorte, p1));
+	m.addSegment(new Segment(p1, p0));
+	m.addSegment(new Segment(p1, p2));
+	m.addSegment(new Segment(p2, p3));
+	m.addSegment(new Segment(p3, p4, 0.3));
 
 	return m;
 }
