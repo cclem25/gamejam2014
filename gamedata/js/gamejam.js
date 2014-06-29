@@ -17,7 +17,6 @@ initGame = function(canvas) {
 	game.addScene(extAqua);
 
 	// scene 3 : Amphi A
-	
 	amphiA = new Scene("amphiA", canvas, meshAmphiA(), "gamedata/images/amphiA.jpg", context, callbackWhenReady);
 	game.addScene(amphiA);
 
@@ -25,15 +24,25 @@ initGame = function(canvas) {
 	aqua = new Scene("Aqua", canvas, meshAqua(), "gamedata/images/aqua.jpg", context, callbackWhenReady);
 	game.addScene(aqua);
 
-	scolarite = new Scene("scolarite", canvas, meshScolarite(), "gamedata/images/IMGP3711.JPG", context, callbackWhenReady);
+	//Scène scolarité
+	scolarite = new Scene("Scolarite", canvas, meshScolarite(), "gamedata/images/IMGP3711.JPG", context, callbackWhenReady);
 	game.addScene(scolarite);
 
+	//Scène batimentG
+	batimentG = new Scene("batimentG", canvas, meshBatimentG(), "gamedata/images/batimentG.JPG", context, callbackWhenReady);
+	game.addScene(batimentG);
+
+	//Biochimie
+	biochimie = new Scene("Biochimie", canvas, meshBiochimie(), "gamedata/images/biochimie.JPG", context, callbackWhenReady);
+	game.addScene(biochimie);
 
 
 	//--------- passages -----//
 	/* Map */
-	map.addPassage(new Passage(510, 580, extAqua, new Point(817, 468)));	
-	map.addPassage(new Passage(583, 163, extAqua, new Point(817, 468)));	
+	map.addPassage(new Passage(510, 580, extAqua, new Point(817, 468)));
+	map.addPassage(new Passage(583, 163, extAqua, new Point(817, 468)));
+	map.addPassage(new Passage(950,30, batimentG, new Point(785, 525)));
+	map.addPassage(new Passage(566, 74, biochimie, new Point(785, 525)));
 	
 	/* Aqua */
 	extAqua.addPassage(new Passage(10, 540, map, new Point(410,630)));
@@ -50,11 +59,16 @@ initGame = function(canvas) {
 
 	/* Scolarité */
 
+	/* BatimentG */
+	//batimentG.addPassage(new Passage(840, 380, salleTP, new Point()));
+	batimentG.addPassage(new Passage(1250, 530, map, new Point(897, 20)));
+
+	/* Biochimie */
+	biochimie.addPassage(new Passage(1246, 492, map, new Point(566, 74)));
+	biochimie.addPassage(new Passage(12, 736, map, new Point(566, 74)));
+
 	return game;	
 }
-
-
-
 
 
 /** Mesh pour la MAP */
@@ -97,6 +111,11 @@ meshMap = function() {
 	p17 = new Point(886, 685);
 	p18 = new Point(522, 704);
 
+	p19 = new Point(829, 66);
+	pBiochimie = new Point(566, 74);
+	p20 = new Point(355, 91);
+	p21 = new Point(360, 151);
+
 	
 	m.addSegment(new Segment(p1, p2));
 	m.addSegment(new Segment(p2, p3));
@@ -105,7 +124,8 @@ meshMap = function() {
 	m.addSegment(new Segment(p5, p6));
 	m.addSegment(new Segment(p6, p7));
 	m.addSegment(new Segment(p7, p8));
-	m.addSegment(new Segment(p8, pEntreeBatC));
+	m.addSegment(new Segment(p8, p21));
+	m.addSegment(new Segment(p21, pEntreeBatC));
 	m.addSegment(new Segment(p6, p9));
 	m.addSegment(new Segment(p9, p10));
 	m.addSegment(new Segment(p10, p11));
@@ -119,9 +139,13 @@ meshMap = function() {
 	m.addSegment(new Segment(p17, p18));
 	m.addSegment(new Segment(p1, p18));
 
+	m.addSegment(new Segment(p21, p20));
+	m.addSegment(new Segment(p20, pBiochimie));
+	m.addSegment(new Segment(pBiochimie, p19));
+	m.addSegment(new Segment(p19, p10));
+
 	return m;
 }
-
 
 // EXTERIEUR AQUA
 meshExterieurAqua = function() {
@@ -186,5 +210,37 @@ meshAqua = function(){
 meshScolarite = function(){
 	var m = new Mesh();
 	var pPorte = new Point(1965, 372);
+	return m;
+}
+
+meshBatimentG = function(){
+	var m = new Mesh();
+
+	var pos1 = new Point(785, 525);
+	var pPorte = new Point(840, 380, 0.8);
+	var pSortie = new Point(1250, 530);
+
+	m.addSegment(new Segment(pos1, pPorte));
+	m.addSegment(new Segment(pos1, pSortie));
+
+	return m;
+}
+
+meshBiochimie = function(){
+	var m = new Mesh();
+
+	var pos1 = new Point(685, 705);
+	var p2 = new Point(1032, 500, 0.5);
+	var p3 = new Point(946, 450, 0.5);
+	var pCendar = new Point(602, 436, 0.5);
+	var pSortieDroite = new Point(1246, 492);
+	var pSortieGauche = new Point(12, 736);
+
+	m.addSegment(new Segment(pSortieGauche, pos1));
+	m.addSegment(new Segment(pos1, p2));
+	m.addSegment(new Segment(p2, p3));
+	m.addSegment(new Segment(p3, pCendar));
+	m.addSegment(new Segment(p3, pSortieDroite));
+
 	return m;
 }
