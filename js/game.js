@@ -39,6 +39,9 @@ function Game(_cvs) {
 	this.currentTimeout = null;
 	
 	
+	this.allObjects = new Object();
+	
+	
 	//---- GAME VARIABLES ---- 
 	
 	/**
@@ -139,6 +142,19 @@ function Game(_cvs) {
 	}
 
 
+	/**
+	 * Adds an item to the inventory
+	 */
+	this.addItemToInventory = function(id) {
+		if (this.allObjects[id] != null) {
+			inventory.addItem(this.allObjects[id]);
+			inventory.updateInDisplay();
+			alert("ok");
+		}
+		else {
+			alert("error : " + id + " not found");	
+		}	
+	}
 
 	/** 
 	 *	Update the inventory display

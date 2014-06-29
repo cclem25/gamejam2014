@@ -16,7 +16,7 @@
 }	
 
 #bcText {
-	width: 300px;
+	width: 500px;
 	color: white;
 	text-shadow: -2px 0 4px black, 0 2px 4px black, 2px 0 4px black, 0 -2px 4px black;	
 	font-size: 24px;
@@ -41,8 +41,8 @@ init = function() {
 	canvas.addEventListener("click", cvsClick, false);
 	context = canvas.getContext("2d");
 	game = initGame(canvas);	
-	game.setCurrentScene("amphiA");	
-	game.getCurrentScene().loadWithLocation(new Point(1100, 300, 1));
+	game.setCurrentScene("Aqua");	
+	game.getCurrentScene().loadWithLocation(new Point(300, 300, 1));
 	mainloop();
 }
 
