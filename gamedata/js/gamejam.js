@@ -34,23 +34,31 @@ initGame = function(canvas) {
 	scolarite = new Scene("Scolarite", canvas, meshScolarite(), "gamedata/images/scolarite.JPG", context, callbackWhenReady);
 	game.addScene(scolarite);
 
+	//Labo math
+	laboMaths = new Scene("labo Maths", canvas, meshLaboMath(), "gamedata/images/laboMaths.jpg", context, callbackWhenReady);
+	game.addScene(laboMaths);
+
 	//Scène batimentG
-	batimentG = new Scene("batimentG", canvas, meshBatimentG(), "gamedata/images/batimentG.JPG", context, callbackWhenReady);
+	batimentG = new Scene("BatimentG", canvas, meshBatimentG(), "gamedata/images/batimentG.JPG", context, callbackWhenReady);
 	game.addScene(batimentG);
+
+	//Scène post batG - salle de TD
+	sceneTD = new Scene("Salle TD", canvas, meshSalleTD(), "gamedata/images/salleTD.jpg", context, callbackWhenReady);
+	game.addScene(sceneTD);
 
 	//Biochimie
 	biochimie = new Scene("Biochimie", canvas, meshBiochimie(), "gamedata/images/biochimie.JPG", context, callbackWhenReady);
 	game.addScene(biochimie);
 
-	//Scène BatimentC
-	batimentC = new Scene("BatimentC", canvas, meshBatimentC(), "gamedata/images/batimentC.JPG", context, callbackWhenReady);
-	game.addScene(batimentC);
+	//Scène labo info
+	laboInfo = new Scene("Labo Informatique", canvas, meshLaboInfo(), "gamedata/images/laboInfo.jpg", context, callbackWhenReady);
+	game.addScene(laboInfo);
 
 
 	//--------- passages -----//
 	/* Map */
 	map.addPassage(new Passage(510, 580, extAqua, new Point(817, 468)));
-	map.addPassage(new Passage(310, 155, batimentC, new Point(817, 468)));
+	map.addPassage(new Passage(310, 155, laboInfo, new Point(557, 569)));
 	map.addPassage(new Passage(950,30, batimentG, new Point(785, 525)));
 	map.addPassage(new Passage(566, 74, biochimie, new Point(785, 525)));
 	//map.addPassage(new Passage(510, 580, extAqua, new Point(817, 468)));	
@@ -60,8 +68,8 @@ initGame = function(canvas) {
 	extAqua.addPassage(new Passage(10, 540, map, new Point(410,630)));
 	extAqua.addPassage(new Passage(1623, 450, map, new Point(517,662)));
 	extAqua.addPassage(new Passage(1478, 402, amphiA, new Point(913, 326, 0.5)));
-	extAqua.addPassage(new Passage(805, 391, aqua ,new Point(910,540)));
-	extAqua.addPassage(new Passage(320, 305, scolarite ,new Point(556, 400)));
+	extAqua.addPassage(new Passage(805, 391, aqua, new Point(910,540)));
+	extAqua.addPassage(new Passage(320, 305, scolarite, new Point(556, 400)));
 
 	/* AmphiA */
 	amphiA.addPassage(new Passage(1132, 286, extAqua, new Point(1478, 445)));
@@ -71,16 +79,26 @@ initGame = function(canvas) {
 
 	/* Scolarité */
 	scolarite.addPassage(new Passage(810, 536, extAqua, new Point(320, 305)));
-	//scolarite.addPassage(new Passage(,, escalier, new Point()));
+	scolarite.addPassage(new Passage(705, 390, laboMaths, new Point(600, 511)));
 	//scolarite.addPassage(new Passage(,, Scol, new Point()));
 
+	/* Labo Maths */
+	laboMaths.addPassage(new Passage(255, 455, scolarite, new Point(556, 400)));
+
 	/* BatimentG */
-	//batimentG.addPassage(new Passage(840, 380, salleTP, new Point()));
+	batimentG.addPassage(new Passage(840, 380, sceneTD, new Point(855, 280)));
 	batimentG.addPassage(new Passage(1250, 530, map, new Point(897, 20)));
+
+	/* Salla de TD */
+	sceneTD.addPassage(new Passage(855, 280, map, new Point(897, 20)));
 
 	/* Biochimie */
 	biochimie.addPassage(new Passage(1246, 492, map, new Point(566, 74)));
 	biochimie.addPassage(new Passage(12, 736, map, new Point(566, 74)));
+
+	/* Labo Info */
+	//laboInfo.addPassage(new Passage(1100, 395, bureauJulien, new Point()));
+	laboInfo.addPassage(new Passage(155, 400, map, new Point(320, 155)));
 
 	//---- Items ----
 	
@@ -263,6 +281,17 @@ meshScolarite = function(){
 	return m;
 }
 
+meshLaboMath = function(){
+	var m = new Mesh();
+
+	var pPorte = new Point(600, 511);
+	var pSortie = new Point(255, 455);
+
+	m.addSegment(new Segment(pPorte, pSortie));
+
+	return m;
+}
+
 meshBatimentG = function(){
 	var m = new Mesh();
 
@@ -272,6 +301,14 @@ meshBatimentG = function(){
 
 	m.addSegment(new Segment(pos1, pPorte));
 	m.addSegment(new Segment(pos1, pSortie));
+
+	return m;
+}
+
+meshSalleTD = function(){
+	var m = new Mesh();
+
+	var pSortie = new Point(855, 280);
 
 	return m;
 }
@@ -295,10 +332,19 @@ meshBiochimie = function(){
 	return m;
 }
 
-meshBatimentC = function(){
+meshLaboInfo = function(){
 	var m = new Mesh();
 
-	var pPorte = new Point(1965, 372);
+	var pBureau = new Point(1100, 395, 0.6);
+	var p1 = new Point(1060, 510, 0.8);
+	var p2 = new Point(575, 570);
+	var p3 = new Point(120, 555, 0.9);
+	var pSortie = new Point(155, 400, 0.7);
+
+	m.addSegment(new Segment(pSortie, p3));
+	m.addSegment(new Segment(p3, p2));
+	m.addSegment(new Segment(p2, p1));
+	m.addSegment(new Segment(p1, pBureau));
 
 	return m;
 }
