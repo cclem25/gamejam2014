@@ -135,18 +135,19 @@ function Scene(_name, _cvs, _mesh, _bg, _ctx, callback) {
 		}
 				
 		// display of the character
-		/*
-		context.beginPath();
-		context.arc(currentPoint.x + OFFSET_X, currentPoint.y + OFFSET_Y, 10*currentPoint.zoom, 0, 2*Math.PI);		
-		context.fill();
-		*/
-		guybrush.play();
-		if (targetPoint.length > 0) {
-			orientation = getOrientation(currentPoint, targetPoint[0]);
-			guybrush.setDirection(orientation);
+		if (!this.useSprite) {
+			context.beginPath();
+			context.arc(currentPoint.x + OFFSET_X, currentPoint.y + OFFSET_Y, 10*currentPoint.zoom, 0, 2*Math.PI);		
+			context.fill();
 		}
-		guybrush.draw(context, currentPoint.x + OFFSET_X, currentPoint.y + OFFSET_Y, currentPoint.zoom);
-		
+		else {
+			guybrush.play();
+			if (targetPoint.length > 0) {
+				orientation = getOrientation(currentPoint, targetPoint[0]);
+				guybrush.setDirection(orientation);
+			}
+			guybrush.draw(context, currentPoint.x + OFFSET_X, currentPoint.y + OFFSET_Y, currentPoint.zoom);
+		}	
 		context.fillText("c_p (" + currentPoint + ")", currentPoint.x - 10 + OFFSET_X, currentPoint.y + 20 + OFFSET_Y);
 	
 	/*

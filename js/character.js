@@ -133,11 +133,11 @@ function Animation(file, sourceHeight, sourceWidth, sourceSpriteSheetY, sourceSp
         if (flip == 1) {
         	context.save();
         	context.scale(-1,1);	
-	        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, -posX-(sourceWidth*ratio)/2 , posY- sourceHeight*ratio + 40, destWidth, destHeight);
+	        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, -posX-(sourceWidth*ratio)/2 , posY- sourceHeight*ratio + 20, destWidth, destHeight);
 			context.restore();	
         }
         else {
-	        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, posX-(sourceWidth*ratio)/2, posY- sourceHeight*ratio + 40, destWidth, destHeight);
+	        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, posX-(sourceWidth*ratio)/2, posY- sourceHeight*ratio + 20, destWidth, destHeight);
         }
 		if (state >= 0) {
 			state = (state + 1) % nbFrames;
