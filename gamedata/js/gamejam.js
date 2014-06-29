@@ -31,7 +31,7 @@ initGame = function(canvas) {
 	game.addScene(aqua);
 
 	//Scène scolarité
-	scolarite = new Scene("Scolarite", canvas, meshScolarite(), "gamedata/images/IMGP3711.JPG", context, callbackWhenReady);
+	scolarite = new Scene("Scolarite", canvas, meshScolarite(), "gamedata/images/scolarite.JPG", context, callbackWhenReady);
 	game.addScene(scolarite);
 
 	//Scène batimentG
@@ -61,7 +61,7 @@ initGame = function(canvas) {
 	extAqua.addPassage(new Passage(1623, 450, map, new Point(517,662)));
 	extAqua.addPassage(new Passage(1478, 402, amphiA, new Point(913, 326, 0.5)));
 	extAqua.addPassage(new Passage(805, 391, aqua ,new Point(910,540)));
-	extAqua.addPassage(new Passage(320, 305, scolarite ,new Point(1000, 1000)));
+	extAqua.addPassage(new Passage(320, 305, scolarite ,new Point(556, 400)));
 
 	/* AmphiA */
 	amphiA.addPassage(new Passage(1132, 286, extAqua, new Point(1478, 445)));
@@ -70,6 +70,9 @@ initGame = function(canvas) {
 	aqua.addPassage(new Passage(1200, 430, extAqua, new Point(805, 391)));
 
 	/* Scolarité */
+	scolarite.addPassage(new Passage(810, 536, extAqua, new Point(320, 305)));
+	//scolarite.addPassage(new Passage(,, escalier, new Point()));
+	//scolarite.addPassage(new Passage(,, Scol, new Point()));
 
 	/* BatimentG */
 	//batimentG.addPassage(new Passage(840, 380, salleTP, new Point()));
@@ -249,7 +252,14 @@ meshAqua = function(){
 
 meshScolarite = function(){
 	var m = new Mesh();
-	var pPorte = new Point(1965, 372);
+
+	var pEscalier = new Point(705, 390);
+	var pScolarite = new Point(300, 350);
+	var pSortie = new Point(810, 536);
+
+	m.addSegment(new Segment(pSortie, pEscalier));
+	m.addSegment(new Segment(pEscalier, pScolarite));
+
 	return m;
 }
 
