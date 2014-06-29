@@ -38,12 +38,12 @@ initGame = function(canvas) {
 	/* Aqua */
 	extAqua.addPassage(new Passage(10, 540, map, new Point(410,630)));
 	extAqua.addPassage(new Passage(1623, 450, map, new Point(517,662)));
-	extAqua.addPassage(new Passage(1478, 402, amphiA, new Point(965, 372, 0.3)));
+	extAqua.addPassage(new Passage(1478, 402, amphiA, new Point(913, 326, 0.5)));
 	extAqua.addPassage(new Passage(805, 391, aqua ,new Point(910,540)));
 	extAqua.addPassage(new Passage(320, 305, scolarite ,new Point(1000, 1000)));
 
 	/* AmphiA */
-	amphiA.addPassage(new Passage(965, 372, extAqua, new Point(1478, 402)));
+	amphiA.addPassage(new Passage(1132, 286, extAqua, new Point(1478, 445)));
 
 	/* Aqua intérieur */
 	aqua.addPassage(new Passage(1200, 430, extAqua, new Point(805, 391)));
@@ -54,7 +54,7 @@ initGame = function(canvas) {
 	//---- Items ----
 	
 	// croissants 
-	var croissant = new Item("croissant",null,"gamedata/images/croissant.png");
+	var croissant = new Item("croissant",null,"./gamedata/images/croissant.png");
 	croissant.onLookAtInInventory =function() { alert("C'est un croissant, il a l'air bon."); }
 	croissant.onUseInInventory = function() {
 		if (game.getCurrentScene().getName() == "amphiA") {
@@ -171,14 +171,18 @@ meshExterieurAqua = function() {
 meshAmphiA = function(){
 	var m = new Mesh();
 
-	var pPorte = new Point(965, 372, 0.3);
-	var pHautEscalier = new Point(1230, 460, 0.4);
-	var pBasEscaliers = new Point(1218, 805, 0.4);
-	var pSiege = new Point(846, 805, 0.4);
+	var pPorte = new Point(1132, 286); 
+	var p0 = new Point(916, 234, 0.3);
+	var p1 = new Point(913, 326, 0.5);
+	var p2 = new Point(755, 565);
+	var p3 = new Point(395, 550);
+	var p4 = new Point(138, 341, 0.2);
 
-	m.addSegment(new Segment(pPorte, pHautEscalier));
-	m.addSegment(new Segment(pHautEscalier, pBasEscaliers));
-	m.addSegment(new Segment(pBasEscaliers, pSiege));
+	m.addSegment(new Segment(pPorte, p1));
+	m.addSegment(new Segment(p1, p0));
+	m.addSegment(new Segment(p1, p2));
+	m.addSegment(new Segment(p2, p3));
+	m.addSegment(new Segment(p3, p4, 0.3));
 
 	return m;
 }

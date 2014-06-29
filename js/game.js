@@ -26,7 +26,7 @@ function Game(_cvs) {
 	/** selected object */
 	var selectedObject = null;
 	
-	// Disabling of right button 	
+	// Disabling of right button
 	document.getElementById("gamearea").oncontextmenu = function(event) {
 		if (event.button == 2) {
 			game.nextAction();	
@@ -109,7 +109,7 @@ function Game(_cvs) {
 	this.nextAction = function() {
 		// update the action kind
 		this.currentAction = (this.currentAction + 1) % 4;
-		if (this.currentAction == this.USE_WITH && this.selectedObject == null) {
+		if (this.currentAction == this.USE_WITH && selectedObject == null) {
 			this.currentAction = 0;	
 		}
 		this.updateCursor();
@@ -128,26 +128,31 @@ function Game(_cvs) {
 			case this.USE:
 				board.style.cursor = "url(./images/main.png) 3 5, auto";
 				break; 	
-//			case USE_WITH:			
-//				board.style.cursor = selectedObject.getCodeToDisplayImageAsCursor();
-//				break;
+			case this.USE_WITH:			
+				board.style.cursor = selectedObject.getCodeToDisplayImageAsCursor();
+				break;
 		}
 	}
 
 
 
 	/** 
-	 *	
+	 *	Update the inventory display
 	 */
 	this.updateInventoryDisplay = function() {
 		inventory.updateInDisplay();
 	} 
 
-	
+	/**
+	 *	Sets the selected object
+	 */
 	this.setSelectedObject = function(o) {
 		selectedObject = o;
 	}	
 	
+	/**
+	 *	Retrieves the currently selected object
+	 */
 	this.getSelectedObject = function() {
 		return selectedObject;	
 	}

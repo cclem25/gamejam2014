@@ -22,6 +22,15 @@ function Item(_id, _spInScene, _spInInventory) {
 	// check if the object is visible in the scene
 	this.isVisible = function() { return true; }
 	
+
+	/**
+	 *	Computes the code that displays the image of the object as the pointer
+	 */
+	this.getCodeToDisplayImageAsCursor = function() {		
+		return 'url(' + this.spriteInInventory + ') ' + 47 + ' ' + 10 /* Math.floor((66 - imgInventoryTopMargin)/2) */ + ', auto';	
+	}
+
+	
 	// function to execute when the object is used
 	this.onUseInScene = null; 
 	
@@ -65,10 +74,7 @@ function InteractiveArea(_id, _point, _radius) {
 	
 	// function to execute when the object is looked in the scene
 	this.onLookAtInScene = null;
-	
-	// function to execute when the object is looked in the inventory
-	this.onLookAtInInventory = null;
-	
+		
 }
 
 

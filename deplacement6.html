@@ -8,9 +8,11 @@
 .bcInv {
 	float: left; 
 	width: 139px;
-	height: 86px;		
+	height: 66px;		
 	background: #FFFFFF;
 	border: solid 1px #000;
+	text-align: center;
+	padding-top: 20px;
 }	
 	</style>
 	
@@ -30,8 +32,8 @@ init = function() {
 	canvas.addEventListener("click", cvsClick, false);
 	context = canvas.getContext("2d");
 	game = initGame(canvas);	
-	game.setCurrentScene("map");	
-	game.getCurrentScene().loadWithLocation(new Point(515, 508, 1));
+	game.setCurrentScene("amphiA");	
+	game.getCurrentScene().loadWithLocation(new Point(1100, 300, 1));
 	mainloop();
 }
 
@@ -124,6 +126,7 @@ getPosition = function(event, OFFSET_X, OFFSET_Y) {
 <body onload="init()">
 
 	<div id="gamearea" style="cursor: url(images/cursor.png); width: 1004px; height: 564px; margin: 20px auto;">
+		<div id="bcTexte" style=""></div>
 		<canvas id="cvs" width="1000" height="470" style="border: solid 2px #000;">
 		Votre navigateur ne supporte pas les canvas... Dommage.
 		</canvas>
