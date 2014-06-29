@@ -16,7 +16,8 @@ initGame = function(canvas) {
 	
 	// scene 1 : map
 	map = new Scene("map", canvas, meshMap(), "gamedata/images/map2.jpg", context, callbackWhenReady);
-	game.addScene(map);	
+	game.addScene(map);
+	map.useSprite = false;
 	
 	// scene 2 : exterieur aqua
 	extAqua = new Scene("exterieurAqua", canvas, meshExterieurAqua(), "gamedata/images/exterieurAqua.jpg", context, callbackWhenReady);
