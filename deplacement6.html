@@ -10,12 +10,14 @@
 	width: 139px;
 	height: 86px;		
 	background: #FFFFFF;
+	border: solid 1px #000;
 }	
 	</style>
 	
 	<script src="./js/mesh.js"></script>	
 	<script src="./js/scene.js"></script>	
 	<script src="./js/game.js"></script>	
+	<script src="./js/item.js"></script>	
 	<script src="./gamedata/js/gamejam.js"></script>	
 	<script type="text/javascript">
 
@@ -36,6 +38,9 @@ init = function() {
 
 callbackWhenReady = function() {
 	game.getCurrentScene().redraw();
+	game.updateInventoryDisplay();
+	game.currentAction = 0;
+	game.updateCursor();
 }
 
 
@@ -62,12 +67,29 @@ cvsClick = function(event) {
 
 
 clickInventory = function(i) {
+	var obj = game.getInventory().getItem(i);
+	if (obj == null) {
+		return;
+	}
 	if (game.currentAction == game.NO_ACTION) {
-		var obj = game.getInventory(i);
-		if (obj != null) {
-			game.setSelectedObject = obj;
-			game.updateInventory();			 	
+		if (game.getSelectedObject() == null) {
+			game.setSelectedObject(obj);
 		}
+		else {
+			game.setSelectedObject(null);	
+		}
+		game.updateInventoryDisplay();
+		return;
+	}
+	if (game.currentAction == game.LOOK_AT) {
+		if (obj.onLookAtInInventory != null) {
+			obj.onLookAtInInventory();
+		}	
+	}
+	if (game.currentAction == game.USE) {
+		if (obj.onUseInInventory != null) {
+			obj.onUseInInventory();
+		}	
 	}
 }
 
@@ -101,7 +123,7 @@ getPosition = function(event, OFFSET_X, OFFSET_Y) {
 
 <body onload="init()">
 
-	<div style="width: 1004px; height: 564px; margin: 20px auto;">
+	<div id="gamearea" style="cursor: url(images/cursor.png); width: 1004px; height: 564px; margin: 20px auto;">
 		<canvas id="cvs" width="1000" height="470" style="border: solid 2px #000;">
 		Votre navigateur ne supporte pas les canvas... Dommage.
 		</canvas>

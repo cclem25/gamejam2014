@@ -50,6 +50,22 @@ initGame = function(canvas) {
 
 	/* Scolarité */
 
+
+	//---- Items ----
+	
+	// croissants 
+	var croissant = new Item("croissant",null,"gamedata/images/croissant.png");
+	croissant.onLookAtInInventory =function() { alert("C'est un croissant, il a l'air bon."); }
+	croissant.onUseInInventory = function() {
+		if (game.getCurrentScene().getName() == "amphiA") {
+			alert("Crunch crunch");	
+		}	
+		else {
+			alert("Non, pas maintenant, je préfère le garder pour plus tard");	
+		}
+	}	
+	game.getInventory().addItem(croissant);
+
 	return game;	
 }
 
