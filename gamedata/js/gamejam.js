@@ -54,6 +54,14 @@ initGame = function(canvas) {
 	laboInfo = new Scene("Labo Informatique", canvas, meshLaboInfo(), "gamedata/images/laboInfo.jpg", context, callbackWhenReady);
 	game.addScene(laboInfo);
 
+	//Bureau JB
+	bureauJulien = new Scene("Bureau JB", canvas, meshBureauJB(), "gamedata/images/bureauJBE.png", context, callbackWhenReady);
+	game.addScene(bureauJulien);
+
+	//Scène JP Ansel
+	//bureauAnsel = new Scene("Bureau Ansel", canvas, meshBureauAnsel(), "gamedata/images/bureauJBE.png", context, callbackWhenReady);
+	//game.addScene(bureauAnsel);
+
 
 	//--------- passages -----//
 	/* Map */
@@ -86,7 +94,7 @@ initGame = function(canvas) {
 	laboMaths.addPassage(new Passage(255, 455, scolarite, new Point(556, 400)));
 
 	/* BatimentG */
-	batimentG.addPassage(new Passage(840, 380, sceneTD, new Point(855, 280)));
+	batimentG.addPassage(new Passage(840, 470, sceneTD, new Point(855, 280)));
 	batimentG.addPassage(new Passage(1250, 530, map, new Point(897, 20)));
 
 	/* Salla de TD */
@@ -97,8 +105,11 @@ initGame = function(canvas) {
 	biochimie.addPassage(new Passage(12, 736, map, new Point(566, 74)));
 
 	/* Labo Info */
-	//laboInfo.addPassage(new Passage(1100, 395, bureauJulien, new Point()));
+	laboInfo.addPassage(new Passage(1100, 395, bureauJulien, new Point(365, 510)));
 	laboInfo.addPassage(new Passage(155, 400, map, new Point(320, 155)));
+
+	/* Bureau Julien */
+	bureauJulien.addPassage(new Passage(100, 440, laboInfo, new Point(557, 569)));
 
 	//---- Items ----
 	
@@ -342,7 +353,7 @@ meshBatimentG = function(){
 	var m = new Mesh();
 
 	var pos1 = new Point(785, 525);
-	var pPorte = new Point(840, 380, 0.8);
+	var pPorte = new Point(840, 470, 0.8);
 	var pSortie = new Point(1250, 530);
 
 	m.addSegment(new Segment(pos1, pPorte));
@@ -355,6 +366,9 @@ meshSalleTD = function(){
 	var m = new Mesh();
 
 	var pSortie = new Point(855, 280);
+	var p1 = new Point(854, 279);
+
+	m.addSegment(new Segment(p1, pSortie));
 
 	return m;
 }
@@ -391,6 +405,17 @@ meshLaboInfo = function(){
 	m.addSegment(new Segment(p3, p2));
 	m.addSegment(new Segment(p2, p1));
 	m.addSegment(new Segment(p1, pBureau));
+
+	return m;
+}
+
+meshBureauJB = function(){
+	var m = new Mesh();
+
+	var pBureau = new Point(365, 510);
+	var pSortie = new Point(100, 440, 0.7);
+
+	m.addSegment(new Segment(pBureau, pSortie));
 
 	return m;
 }
