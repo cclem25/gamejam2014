@@ -63,6 +63,11 @@ function Scene(_name, _cvs, _mesh, _bg, _ctx, callback) {
 	var interactiveAreas = [];
 	
 
+	var guybrush = new character("./gamedata/images/SpriteSheet-Monkey3_EDITED.png", "NE", 1, function() {} )
+	var orientation = "NE";
+
+	this.useSprite = true;
+
 	/**
 	 *	@param startingPoint 
 	 */
@@ -130,9 +135,19 @@ function Scene(_name, _cvs, _mesh, _bg, _ctx, callback) {
 		}
 				
 		// display of the character
-		context.beginPath();
-		context.arc(currentPoint.x + OFFSET_X, currentPoint.y + OFFSET_Y, 10*currentPoint.zoom, 0, 2*Math.PI);		
-		context.fill();
+		if (!this.useSprite) {
+			context.beginPath();
+			context.arc(currentPoint.x + OFFSET_X, currentPoint.y + OFFSET_Y, 10*currentPoint.zoom, 0, 2*Math.PI);		
+			context.fill();
+		}
+		else {
+			guybrush.play();
+			if (targetPoint.length > 0) {
+				orientation = getOrientation(currentPoint, targetPoint[0]);
+				guybrush.setDirection(orientation);
+			}
+			guybrush.draw(context, currentPoint.x + OFFSET_X, currentPoint.y + OFFSET_Y, currentPoint.zoom);
+		}	
 		context.fillText("c_p (" + currentPoint + ")", currentPoint.x - 10 + OFFSET_X, currentPoint.y + 20 + OFFSET_Y);
 	
 	/*
@@ -152,12 +167,42 @@ function Scene(_name, _cvs, _mesh, _bg, _ctx, callback) {
 	}
 	
 
+	getOrientation = function(src, dest) {
+		var y = dest.y - src.y;
+		var x = dest.x - src.x;
+		var angle = Math.atan2(-y,x);
+		if (angle >= -Math.PI/8 && angle <= Math.PI/8) {
+			return "E";	
+		} 
+		if (angle >= Math.PI/8 && angle <= 3*Math.PI/8) {
+			return "NE";	
+		}
+		if (angle >= 3*Math.PI/8 && angle <= 5*Math.PI/8) {
+			return "N";	
+		}
+		if (angle >= 5*Math.PI/8 && angle <= 7*Math.PI/8) {
+			return "NW";	
+		}
+		if (angle <= -Math.PI/8 && angle >= -3*Math.PI/8) {
+			return "SE";	
+		}
+		if (angle <= -3*Math.PI/8 && angle >= -5*Math.PI/8) {
+			return "S";	
+		}
+		if (angle <= -5*Math.PI/8 && angle >= -7*Math.PI/8) {
+			return "SW";	
+		}
+		return "W";
+	}
+
 	
 	/**
 	 *	Called when the scene is clicked
 	 *	@param 	clickedPoint	the point that has just been clicked
 	 */
 	this.click = function(clickedPoint) {
+		
+		actionWhenPointIsReached = null;
 		
 		if (game.currentAction == game.LOOK_AT) {
 			// TODO check if something can be seen in the scene (huhuhu)

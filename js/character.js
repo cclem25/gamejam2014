@@ -21,17 +21,26 @@ function character(file, direction, isRunning, callback){
 	var currentAnimation = null;
 	//var point = _pt;
 	var direction = direction;
+	this.setDirection = function(newDir) {
+		direction = newDir;	
+		currentAnimation = animation[direction];
+	}
+	
 	var isRunning = isRunning;
+	this.setRunning = function(newRun) {
+		isRunning = newRun;	
+	}
 
 	var animation = new Object();
 	animation["N"] = new Animation(file, 282, 80, 1125, 0, 12, 80, 0, 0, 1, callback);
-	animation["NE"] = new Animation(file, 290, 111, 1405, 0, 12, 111, 0, 1, 1, callback);
-	animation["E"] = new Animation(file, 275, 120, 853, 0, 12, 120, 0, 1, 1, callback);
-	animation["SE"] = new Animation(file, 280, 120, 578, 0, 12, 120, 0, 1, 1, callback);
+	animation["E"] = new Animation(file, 275, 120, 852, 0, 12, 121, 0, 1, 1, callback);
+	animation["W"] = new Animation(file, 275, 120, 852, 0, 12, 121, 0, 0, 1, callback);
+	animation["SE"] = new Animation(file, 276, 120, 578, 0, 12, 121, 0, 1, 1, callback);
 	animation["S"] = new Animation(file, 285, 85, 292, 0, 12, 85, 0, 0, 1, callback);
-	animation["SW"] = new Animation(file, 278, 120, 578, 0, 12, 120, 0, 0, 1, callback);
-	animation["W"] = new Animation(file, 275, 120, 853, 0, 12, 120, 0, 0, 1, callback);
+	animation["SE"] = new Animation(file, 276, 120, 578, 0, 12, 121, 0, 1, 1, callback);
+	animation["SW"] = new Animation(file, 276, 120, 578, 0, 12, 121, 0, 0, 1, callback);
 	animation["NW"] = new Animation(file, 290, 111, 1407, 0, 12, 111, 0, 0, 1, callback);
+	animation["NE"] = new Animation(file, 290, 111, 1407, 0, 12, 111, 0, 1, 1, callback);
 
 	var positionArret = new Object();
 	positionArret["N"] = new Animation(file, 290, 100, 0, 520, 1, 0, 0, 0, 1, callback);
@@ -124,11 +133,11 @@ function Animation(file, sourceHeight, sourceWidth, sourceSpriteSheetY, sourceSp
         if (flip == 1) {
         	context.save();
         	context.scale(-1,1);	
-	        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, -canvas.width+posX, posY, destWidth, destHeight);
+	        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, -posX-(sourceWidth*ratio)/2 , posY- sourceHeight*ratio + 20, destWidth, destHeight);
 			context.restore();	
         }
         else {
-	        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, posX, posY, destWidth, destHeight);
+	        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, posX-(sourceWidth*ratio)/2, posY- sourceHeight*ratio + 20, destWidth, destHeight);
         }
 		if (state >= 0) {
 			state = (state + 1) % nbFrames;
